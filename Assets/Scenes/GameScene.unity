@@ -339,7 +339,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u9996\u5148\u662F\u79FB\u52A8\uFF0C\u5047\u8BBE\u662F\u5B89\u5353\u7AEF\uFF0C\u9F20\u6807\u6309\u4E0B\u540E\u62D6\u62FD\u79FB\u52A8\uFF0C\u79FB\u52A8\u6709\u8FB9\u754C\n\n\u4E4B\u540E\u662F\u56DB\u53C9\u6811\uFF0C\u76F4\u63A5\u7528\u5199\u597D\u7684\n\n\u4E4B\u540E\u662F\u5B50\u5F39\uFF0C\u73A9\u5BB6\u7684\u5B50\u5F39\n\n\u4E4B\u540E\u662F\u751F\u547D\u7EC4\u4EF6\uFF0C\u654C\u4EBA\u7684\n\n\u6682\u65F6\u5C31\u8FD9\u4E9B\uFF0C\u5230\u8FD9\u5C31\u80FD\u6253\u5230\u654C\u4EBA\u4E86"
+  m_Text: "\u9700\u8981\u589E\u52A0\u4E00\u4E2A\u654C\u4EBA\u7684\u63A7\u5236\u5668\uFF0C\u68C0\u6D4B\u78B0\u649E\u3001\u8054\u7CFB\u78B0\u649E\u5668\u548C\u751F\u547D\u7EC4\u4EF6\uFF0C\u540C\u65F6\u76D1\u542C\u78B0\u649E\u548C\u6B7B\u4EA1\u4E24\u4E2A\u4E8B\u4EF6\n\u540C\u6B65\u79FB\u9664\u751F\u547D\u7EC4\u4EF6\u5BF9\u78B0\u649E\u4E8B\u4EF6\u7684\u76D1\u542C\n\n\u78B0\u649E\u68C0\u6D4B\u6539\u7EC4\u4EF6\u5224\u65AD\u4E3A\u5148\u6807\u7B7E\u5224\u65AD\u7EC4\u4EF6\u5224\u65AD\uFF0C\u4F24\u5BB3\u548C\u751F\u547D\u7EC4\u4EF6\u4FDD\u6301\u901A\u7528\uFF0C\u7531\u63A7\u5236\u5668\u8D1F\u8D23\u5224\u65AD\n\n\u4EE3\u7801\u751F\u6210\u73A9\u5BB6\u6A21\u578B\uFF0C\u7BAD\u5934\u5F62\n\n\u589E\u52A0\u654C\u4EBA\u7684\u5B50\u5F39\u548C\u53D1\u5C04\u5B50\u5F39\n\n\u589E\u52A0\u73A9\u5BB6\u63A7\u5236\u5668\uFF0C\u63A7\u5236\u62D6\u52A8\u7EC4\u4EF6\u3001\u78B0\u649E\u4E8B\u4EF6\uFF0C\u76D1\u542C\u78B0\u649E\u548C\u6B7B\u4EA1\u4E8B\u4EF6"
 --- !u!222 &402454587
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -665,9 +665,10 @@ GameObject:
   - component: {fileID: 1808914481}
   - component: {fileID: 1808914485}
   - component: {fileID: 1808914486}
+  - component: {fileID: 1808914487}
   m_Layer: 0
   m_Name: Enemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -762,7 +763,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bf565c75dd4bc747955e5ac675a8b3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _lifePoint: 5000
+  _lifePoint: 2000
+--- !u!114 &1808914487
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1808914480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a55c906299bdc2c49a89b3e2b5ba08aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1829961368
 GameObject:
   m_ObjectHideFlags: 0
