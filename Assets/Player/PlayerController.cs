@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(QuadtreeCollider))]
+
 [RequireComponent(typeof(Life))]
-public class EnemyController : MonoBehaviour
+[RequireComponent(typeof(DragMove))]
+public class PlayerController : MonoBehaviour
 {
     QuadtreeCollider _collider;
     Life _life;
@@ -43,7 +44,7 @@ public class EnemyController : MonoBehaviour
 
     void OnCollision(GameObject collider)
     {
-        if (collider.tag == "Player Bullet")
+        if (collider.tag == "Enemy Bullet")
             GetShot(collider.GetComponent<Damage>());
     }
 
