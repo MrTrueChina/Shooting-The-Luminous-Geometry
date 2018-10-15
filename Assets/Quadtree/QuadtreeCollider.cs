@@ -73,7 +73,10 @@ public class QuadtreeCollider : MonoBehaviour
 
         GameObject[] colliderGameObjects = QuadtreeObject.CheckCollision(_leaf);
         foreach (GameObject colliderGameObject in colliderGameObjects)
+        {
+            if (collisionEvent == null) return;
             collisionEvent(colliderGameObject);
+        }
     }
 
 
@@ -85,6 +88,8 @@ public class QuadtreeCollider : MonoBehaviour
     
     private void OnDrawGizmos()
     {
+        if (!enabled) return;
+
         Gizmos.color = _checkCollision ? Color.yellow * 0.8f : Color.green * 0.8f;
 
         MyGizmos.DrawCircle(transform.position, _radius * Mathf.Max(transform.lossyScale.x, transform.lossyScale.y), 60);
