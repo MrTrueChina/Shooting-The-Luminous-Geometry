@@ -4,6 +4,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(QuadtreeCollider))]
 [RequireComponent(typeof(Life))]
+[RequireComponent(typeof(EnemyShot))]
 public class EnemyController : MonoBehaviour
 {
     QuadtreeCollider _collider;
