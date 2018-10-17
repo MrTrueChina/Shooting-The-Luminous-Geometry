@@ -3,21 +3,16 @@
 public class PlayerShot : MonoBehaviour
 {
     [SerializeField]
+    Transform[] _shotPoints;
+
+    [SerializeField]
     GameObject _bullet;
 
     [SerializeField]
     float _shotInterval;
-
-
-    Transform _transform;
+    
 
     float _nextShot;
-
-
-    private void Awake()
-    {
-        _transform = transform;
-    }
 
 
     private void Update()
@@ -28,8 +23,27 @@ public class PlayerShot : MonoBehaviour
 
     void Shot()
     {
-        Instantiate(_bullet, _transform.position, _transform.rotation);
+        foreach(Transform shotPoint in _shotPoints)
+            Instantiate(_bullet, shotPoint.position, shotPoint.rotation);
 
         _nextShot = Time.time + _shotInterval;
+    }
+
+
+    private void OnDrawGizmosSelected()
+    {
+        DrawTrajectory();
+    }
+
+    void DrawTrajectory()
+    {
+        Gizmos.color = Color.red;
+
+        foreach (Transform shotPoint in _shotPoints)
+        {
+            Vector3 endPoint = shotPoint.position + shotPoint.up * 10000;
+
+            Gizmos.DrawLine(shotPoint.position, endPoint);
+        }
     }
 }

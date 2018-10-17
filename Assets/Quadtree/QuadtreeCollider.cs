@@ -74,7 +74,7 @@ public class QuadtreeCollider : MonoBehaviour
         GameObject[] colliderGameObjects = QuadtreeObject.CheckCollision(_leaf);
         foreach (GameObject colliderGameObject in colliderGameObjects)
         {
-            if (collisionEvent == null) return;
+            if (collisionEvent == null) break;
             collisionEvent(colliderGameObject);
         }
     }

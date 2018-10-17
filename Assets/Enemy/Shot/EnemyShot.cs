@@ -54,7 +54,18 @@ public class EnemyShot : MonoBehaviour
     {
         Quaternion rotationToPlayer = GetRotationToPlayer();
 
-        Instantiate(_bullet, _transform.position, rotationToPlayer);
+        Vector3 rotationToPlayerEuler = rotationToPlayer.eulerAngles;
+        rotationToPlayerEuler.z -= 30;
+        rotationToPlayer.eulerAngles = rotationToPlayerEuler;
+
+        for (int i = 0; i < 7; i++)
+        {
+            Instantiate(_bullet, _transform.position, rotationToPlayer);
+
+            rotationToPlayerEuler = rotationToPlayer.eulerAngles;
+            rotationToPlayerEuler.z += 10;
+            rotationToPlayer.eulerAngles = rotationToPlayerEuler;
+        }
 
         UpdateNextShot();
     }
