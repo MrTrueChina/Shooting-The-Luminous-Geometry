@@ -339,8 +339,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u589E\u52A0\u654C\u4EBA\u201C\u6E38\u52A8\u201D\uFF0C\u6709\u8303\u56F4\u3001\u6700\u5927\u901F\u5EA6\uFF0C\u4E0D\u80FD\u7528\u7A81\u53D1\u5F0F\u8F6C\u5411\n\n\u4FEE\u6539\u73A9\u5BB6\u5B50\u5F39\u4E3A
-    2-3 \u884C\uFF0C\u5C0F\u89D2\u5EA6\u5206\u6563\n\n\u4FEE\u6539\u654C\u4EBA\u5F39\u5E55\u4E3A\u6247\u5F62"
+  m_Text: "\u7EDF\u4E00\u5B50\u5F39\u79FB\u52A8\u7EC4\u4EF6\uFF0C\u589E\u52A0\u5B58\u5165\u901F\u5EA6\u529F\u80FD\n\n\u5B8C\u6210\u6A2A\u884C\u5F39\u5E55"
 --- !u!222 &402454587
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -783,6 +782,7 @@ GameObject:
   - component: {fileID: 1808914487}
   - component: {fileID: 1808914488}
   - component: {fileID: 1808914482}
+  - component: {fileID: 1808914489}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Enemy
@@ -850,8 +850,8 @@ MonoBehaviour:
     right: 200
     bottom: 300
     left: -200
-  _maxAcceleration: 20
-  _maxSpeed: 50
+  _maxAcceleration: 50
+  _maxSpeed: 100
   _nextTargetDistance: 100
 --- !u!33 &1808914483
 MeshFilter:
@@ -897,7 +897,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bf565c75dd4bc747955e5ac675a8b3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _lifePoint: 5000
+  _lifePoint: 1000000
 --- !u!114 &1808914487
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -921,7 +921,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _bullet: {fileID: 1829913912689852, guid: 49fd23e09c058084bbd49a8467e02ca9, type: 2}
-  _shotInterval: 0.2
+  _shotInterval: 0.5
+--- !u!114 &1808914489
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1808914480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82e698980e69e264ba28b59a221ec101, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1829961368
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,7 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
+[RequireComponent(typeof(BarrageLauncher))]
 public class EnemyShot : MonoBehaviour
 {
     [SerializeField]
@@ -10,7 +9,7 @@ public class EnemyShot : MonoBehaviour
     [SerializeField]
     float _shotInterval;
 
-
+    BarrageLauncher _launcher;
     Transform _transform;
     Transform _playerTransform;
 
@@ -19,6 +18,7 @@ public class EnemyShot : MonoBehaviour
 
     private void Awake()
     {
+        _launcher = GetComponent<BarrageLauncher>();
         _transform = transform;
     }
 
@@ -52,44 +52,12 @@ public class EnemyShot : MonoBehaviour
 
     void DoShot()
     {
-        Quaternion rotationToPlayer = GetRotationToPlayer();
-
-        Vector3 rotationToPlayerEuler = rotationToPlayer.eulerAngles;
-        rotationToPlayerEuler.z -= 30;
-        rotationToPlayer.eulerAngles = rotationToPlayerEuler;
-
-        for (int i = 0; i < 7; i++)
-        {
-            Instantiate(_bullet, _transform.position, rotationToPlayer);
-
-            rotationToPlayerEuler = rotationToPlayer.eulerAngles;
-            rotationToPlayerEuler.z += 10;
-            rotationToPlayer.eulerAngles = rotationToPlayerEuler;
-        }
-
+        //_launcher.ShotABullet(_bullet, _transform.position, BarrageBase.GetAimRotation(_transform.position, _playerTransform.position));
+        _launcher.ShotFanShapedBullets(_bullet, _transform.position, BarrageBase.GetAimRotation(_transform.position, _playerTransform.position), 7, 60);
+        //_launcher.ShotRing(_bullet, _transform.position, BarrageBase.GetAimRotation(_transform.position, _playerTransform.position), 12);
+        //_launcher.ShotCross(_bullet, _transform.position, BarrageBase.GetAimRotation(_transform.position, _playerTransform.position));
+        
         UpdateNextShot();
-    }
-
-    Quaternion GetRotationToPlayer()
-    {
-        float angle = GetAngleToPlayer();
-        Vector3 eulerAngle = new Vector3(0, 0, angle);
-
-        Quaternion rotation = new Quaternion();
-        rotation.eulerAngles = eulerAngle;
-
-        return rotation;
-    }
-
-    float GetAngleToPlayer()
-    {
-        Vector2 direction = _playerTransform.position - _transform.position;
-        float angle = Vector2.Angle(Vector2.up, direction);
-
-        if (_playerTransform.position.x > _transform.position.x)
-            angle = -angle;
-
-        return angle;
     }
 
     void UpdateNextShot()
