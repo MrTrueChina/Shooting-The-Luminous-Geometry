@@ -26,6 +26,7 @@ public class EnemyShot : MonoBehaviour
     private void Start()
     {
         FindPlayer();
+        _launcher.StartShotScrew(_bullet,_transform,Quaternion.identity,360,10,0.05f);
     }
     void FindPlayer()
     {
@@ -37,6 +38,11 @@ public class EnemyShot : MonoBehaviour
 
 
     private void Update()
+    {
+        StateOne();
+    }
+
+    void StateOne()
     {
         if (_playerTransform != null)
             Shot();
@@ -52,12 +58,8 @@ public class EnemyShot : MonoBehaviour
 
     void DoShot()
     {
-        //_launcher.ShotABullet(_bullet, _transform.position, BarrageBase.GetAimRotation(_transform.position, _playerTransform.position));
-        //_launcher.ShotFanShapedBullets(_bullet, _transform.position, BarrageBase.GetAimRotation(_transform.position, _playerTransform.position), 7, 60);
-        //_launcher.ShotRing(_bullet, _transform.position, BarrageBase.GetAimRotation(_transform.position, _playerTransform.position), 12);
-        //_launcher.ShotCross(_bullet, _transform.position, BarrageBase.GetAimRotation(_transform.position, _playerTransform.position));
-        //_launcher.ShotTransverselyLine(_bullet, _transform.position, BarrageBase.GetAimRotation(_transform.position, _playerTransform.position), 15, 45);
-        _launcher.ShotPane(_bullet, _transform.position, BarrageBase.GetAimRotation(_transform.position, _playerTransform.position), 9);
+        Vector2 shotPoint = new Vector2(Random.Range(-300, 300), Random.Range(0, 500));
+        _launcher.ShotRing(_bullet, shotPoint, BarrageBase.GetAimRotation(_transform.position, _playerTransform.position), 24);
 
         UpdateNextShot();
     }

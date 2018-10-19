@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using UnityEditor;
+﻿using UnityEditor;
+using UnityEngine;
 
 [CanEditMultipleObjects]
 [CustomEditor(typeof(CreatPlayerModel))]

@@ -4,8 +4,6 @@
  *  需要速度、方向、转向接口
  */
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MoveUp : MonoBehaviour
@@ -21,6 +19,11 @@ public class MoveUp : MonoBehaviour
     [SerializeField]
     float _speed;
     
+    public Quaternion rotation
+    {
+        get { return _transform.rotation; }
+        set { _transform.rotation = value; }
+    }
 
     Transform _transform;
 

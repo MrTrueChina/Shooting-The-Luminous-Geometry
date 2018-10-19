@@ -464,7 +464,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae677d53fa3a40b498159914f50790dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _radius: 0.5
+  _radius: 0.35
   _checkCollision: 1
 --- !u!114 &1109300026
 MonoBehaviour:
@@ -859,7 +859,7 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1808914480}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!4 &1808914484
 Transform:
   m_ObjectHideFlags: 0
@@ -884,7 +884,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae677d53fa3a40b498159914f50790dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _radius: 0.8
+  _radius: 0.5
   _checkCollision: 1
 --- !u!114 &1808914486
 MonoBehaviour:

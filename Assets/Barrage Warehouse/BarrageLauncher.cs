@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BarrageLauncher : MonoBehaviour
@@ -137,5 +136,63 @@ public class BarrageLauncher : MonoBehaviour
 
 
         
+    }
+
+
+    /// <summary>
+    /// 发射螺旋弹幕
+    /// </summary>
+    /// <param name="bullet"></param>
+    /// <param name="position"></param>
+    /// <param name="startRotation"></param>
+    /// <param name="bulletsNumber"></param>
+    /// <param name="deltaAngle"></param>
+    /// <param name="shotInterval"></param>
+    /// <returns></returns>
+    public IEnumerator ShotScrew(GameObject bullet, Vector3 position, Quaternion startRotation, int bulletsNumber, float deltaAngle, float shotInterval)
+    {
+        float startEulerZ = startRotation.eulerAngles.z;
+
+        WaitForSeconds waitForNextShot = new WaitForSeconds(shotInterval);
+
+        for (int i = 0; i < bulletsNumber; i++)
+        {
+            Quaternion rotation = new Quaternion();
+            rotation.eulerAngles = new Vector3(0, 0, startEulerZ + deltaAngle * i);
+
+            Instantiate(bullet, position, rotation);
+
+            yield return waitForNextShot;
+        }
+    }
+    public void StartShotScrew(GameObject bullet, Transform transform, Quaternion startRotation, int bulletsNumber, float deltaAngle, float shotInterval)
+    {
+        StartCoroutine(ShotScrew(bullet, transform, startRotation, bulletsNumber, deltaAngle, shotInterval));
+    }
+    /// <summary>
+    /// 发射螺旋弹幕
+    /// </summary>
+    /// <param name="bullet"></param>
+    /// <param name="transform"></param>
+    /// <param name="startRotation"></param>
+    /// <param name="bulletsNumber"></param>
+    /// <param name="deltaAngle"></param>
+    /// <param name="shotInterval"></param>
+    /// <returns></returns>
+    public IEnumerator ShotScrew(GameObject bullet, Transform transform, Quaternion startRotation, int bulletsNumber, float deltaAngle, float shotInterval)
+    {
+        float startEulerZ = startRotation.eulerAngles.z;
+
+        WaitForSeconds waitForNextShot = new WaitForSeconds(shotInterval);
+
+        for (int i = 0; i < bulletsNumber; i++)
+        {
+            Quaternion rotation = new Quaternion();
+            rotation.eulerAngles = new Vector3(0, 0, startEulerZ - deltaAngle * i);
+
+            Instantiate(bullet, transform.position, rotation);
+
+            yield return waitForNextShot;
+        }
     }
 }
