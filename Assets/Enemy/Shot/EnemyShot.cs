@@ -53,10 +53,11 @@ public class EnemyShot : MonoBehaviour
     void DoShot()
     {
         //_launcher.ShotABullet(_bullet, _transform.position, BarrageBase.GetAimRotation(_transform.position, _playerTransform.position));
-        _launcher.ShotFanShapedBullets(_bullet, _transform.position, BarrageBase.GetAimRotation(_transform.position, _playerTransform.position), 7, 60);
+        //_launcher.ShotFanShapedBullets(_bullet, _transform.position, BarrageBase.GetAimRotation(_transform.position, _playerTransform.position), 7, 60);
         //_launcher.ShotRing(_bullet, _transform.position, BarrageBase.GetAimRotation(_transform.position, _playerTransform.position), 12);
         //_launcher.ShotCross(_bullet, _transform.position, BarrageBase.GetAimRotation(_transform.position, _playerTransform.position));
-        
+        _launcher.ShotTransverselyLine(_bullet, _transform.position, BarrageBase.GetAimRotation(_transform.position, _playerTransform.position), 15, 45);
+
         UpdateNextShot();
     }
 

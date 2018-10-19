@@ -1,5 +1,7 @@
 ﻿/*
  *  移动，需要越界销毁
+ *  
+ *  需要速度、方向、转向接口
  */
 
 using System.Collections;
@@ -10,8 +12,15 @@ public class MoveUp : MonoBehaviour
 {
     [SerializeField]
     Border _destroyBorder;
+
+    public float speed
+    {
+        get { return _speed; }
+        set { _speed = value; }
+    }
     [SerializeField]
     float _speed;
+    
 
     Transform _transform;
 
@@ -28,6 +37,7 @@ public class MoveUp : MonoBehaviour
         CheckAndDestroy();
     }
 
+
     void Move()
     {
         _transform.Translate(Vector2.up * _speed * Time.deltaTime);
@@ -39,13 +49,23 @@ public class MoveUp : MonoBehaviour
         if (OutOfBorder())
             Destroy(gameObject);
     }
-
     bool OutOfBorder()
     {
         return _transform.position.x > _destroyBorder.right || _transform.position.x < _destroyBorder.left || _transform.position.y > _destroyBorder.top || _transform.position.y < _destroyBorder.bottom;
     }
 
 
+
+    public void Rotation(float angle)
+    {
+        _transform.Rotate(_transform.forward, angle);
+    }
+
+
+
+
+
+    //Gizmo
     private void OnDrawGizmosSelected()
     {
         DrawBorder();
