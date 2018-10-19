@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BarrageLauncher : MonoBehaviour
@@ -9,9 +10,9 @@ public class BarrageLauncher : MonoBehaviour
     /// <param name="bullet"></param>
     /// <param name="position"></param>
     /// <param name="rotation"></param>
-    public void ShotABullet(GameObject bullet, Vector3 position, Quaternion rotation)
+    public GameObject ShotABullet(GameObject bullet, Vector3 position, Quaternion rotation)
     {
-        Instantiate(bullet, position, rotation);
+        return Instantiate(bullet, position, rotation);
     }
 
     /// <summary>
@@ -22,8 +23,10 @@ public class BarrageLauncher : MonoBehaviour
     /// <param name="rotation"></param>
     /// <param name="bulletsNumber"></param>
     /// <param name="angle"></param>
-    public void ShotFanShapedBullets(GameObject bullet, Vector3 position, Quaternion rotation, int bulletsNumber, float angle)
+    public GameObject[] ShotFanShapedBullets(GameObject bullet, Vector3 position, Quaternion rotation, int bulletsNumber, float angle)
     {
+        List<GameObject> bullets = new List<GameObject>();
+
         Vector3 eulerAngle = rotation.eulerAngles;
         eulerAngle.z -= angle / 2;
 
@@ -32,10 +35,12 @@ public class BarrageLauncher : MonoBehaviour
             Quaternion currentRotation = new Quaternion();
             currentRotation.eulerAngles = eulerAngle;
 
-            Instantiate(bullet, position, currentRotation);
+            bullets.Add(Instantiate(bullet, position, currentRotation));
 
             eulerAngle.z += angle / (bulletsNumber - 1);
         }
+
+        return bullets.ToArray();
     }
 
     /// <summary>
@@ -45,8 +50,10 @@ public class BarrageLauncher : MonoBehaviour
     /// <param name="position"></param>
     /// <param name="rotation"></param>
     /// <param name="bulletNumber"></param>
-    public void ShotRing(GameObject bullet, Vector3 position, Quaternion rotation, int bulletsNumber)
+    public GameObject[] ShotRing(GameObject bullet, Vector3 position, Quaternion rotation, int bulletsNumber)
     {
+        List<GameObject> bullets = new List<GameObject>();
+
         Vector3 eulerAngle = rotation.eulerAngles;
 
         for (int i = 0; i < bulletsNumber; i++)
@@ -54,10 +61,12 @@ public class BarrageLauncher : MonoBehaviour
             Quaternion currentRotation = new Quaternion();
             currentRotation.eulerAngles = eulerAngle;
 
-            Instantiate(bullet, position, currentRotation);
+            bullets.Add(Instantiate(bullet, position, currentRotation));
 
             eulerAngle.z += 360f / bulletsNumber;
         }
+
+        return bullets.ToArray();
     }
 
     /// <summary>

@@ -4,7 +4,7 @@
 /// 改变子弹速度的脚本
 /// </summary>
 [RequireComponent(typeof(MoveUp))]
-public class BulletSpeedChange : MonoBehaviour
+public class BulletSpeedChange : BulletContorllerBase
 {
     public float startTime
     {
@@ -55,5 +55,15 @@ public class BulletSpeedChange : MonoBehaviour
 
         if (Time.time > _endChangeTime)
             Destroy(this);
+    }
+
+
+    public override void CopyToGameobject(GameObject target)
+    {
+        BulletSpeedChange copy = target.AddComponent<BulletSpeedChange>();
+
+        copy.startTime = _startTime;
+        copy.changeTime = _changeTime;
+        copy.targetSpeed = _targetSpeed;
     }
 }

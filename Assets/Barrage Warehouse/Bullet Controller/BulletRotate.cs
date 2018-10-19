@@ -4,7 +4,7 @@
 /// 控制子弹转向的组件（顺时针）
 /// </summary>
 [RequireComponent(typeof(MoveUp))]
-public class BulletRotate : MonoBehaviour
+public class BulletRotate : BulletContorllerBase
 {
     public float startTime
     {
@@ -61,5 +61,15 @@ public class BulletRotate : MonoBehaviour
 
         if (Time.time > _endRotateTime)
             Destroy(this);
+    }
+
+
+    public override void CopyToGameobject(GameObject target)
+    {
+        BulletRotate copy = target.AddComponent<BulletRotate>();
+
+        copy.startTime = _startTime;
+        copy.rotateTime = _rotateTime;
+        copy.angle = _angle;
     }
 }
