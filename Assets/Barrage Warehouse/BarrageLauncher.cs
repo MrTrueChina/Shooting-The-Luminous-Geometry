@@ -91,37 +91,18 @@ public class BarrageLauncher : MonoBehaviour
          */
          
         float length = Mathf.Tan(angle * Mathf.Deg2Rad / 2) * 2;    //数字横行的长度
-        Debug.Log("length = " + length);
-
-
-        Vector3 eulerAngle = rotation.eulerAngles;
+        float eulerZ = rotation.eulerAngles.z;
 
         for (int i = 0; i < bulletsNumber; i++)
         {
-
-
-            //位置
             float currentX = length / (bulletsNumber - 1) * i - length / 2;
-
-            Vector2 currentSpeedPosition = new Vector2(currentX, 1);
-            currentSpeedPosition.x = currentX;
-
-
             
-            //旋转
             Quaternion currentRotation = BarrageBase.GetAimRotation(Vector2.zero, new Vector2(currentX, 1));
-            currentRotation.eulerAngles = currentRotation.eulerAngles + new Vector3(0, 0, eulerAngle.z);
-
-
+            currentRotation.eulerAngles = currentRotation.eulerAngles + new Vector3(0, 0, eulerZ);
+            
             MoveUp move = Instantiate(bullet, position, currentRotation).GetComponent<MoveUp>();
-
-
-
-
-            //速度
-            float currentDistance = Mathf.Sqrt(1 + currentX * currentX);
-
-            move.speed = move.speed * currentDistance;
+            
+            move.speed = move.speed * Mathf.Sqrt(1 + currentX * currentX);  //因为到中心点的距离是1，那么所有点的速度比例就和距离相同，直接乘上就行
 
         }
     }
