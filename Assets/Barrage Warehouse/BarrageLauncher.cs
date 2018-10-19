@@ -103,7 +103,39 @@ public class BarrageLauncher : MonoBehaviour
             MoveUp move = Instantiate(bullet, position, currentRotation).GetComponent<MoveUp>();
             
             move.speed = move.speed * Mathf.Sqrt(1 + currentX * currentX);  //因为到中心点的距离是1，那么所有点的速度比例就和距离相同，直接乘上就行
-
         }
+    }
+
+    /// <summary>
+    /// 发射方框子弹
+    /// </summary>
+    /// <param name="bullet"></param>
+    /// <param name="position"></param>
+    /// <param name="rotation"></param>
+    /// <param name="bulletsNumberASide"></param>
+    public void ShotPane(GameObject bullet, Vector3 position, Quaternion rotation, int bulletsNumberASide)
+    {
+        float length = Mathf.Tan(90 * Mathf.Deg2Rad / 2) * 2;    //数字横行的长度
+        float eulerZ = rotation.eulerAngles.z;
+        
+        for (int i = 0; i < 4; i++)
+        {
+            for (int j = 0; j < bulletsNumberASide - 1; j++)
+            {
+                float currentX = length / (bulletsNumberASide - 1) * j - length / 2;
+
+                Quaternion currentRotation = BarrageBase.GetAimRotation(Vector2.zero, new Vector2(currentX, 1));
+                currentRotation.eulerAngles = currentRotation.eulerAngles + new Vector3(0, 0, eulerZ);
+
+                MoveUp move = Instantiate(bullet, position, currentRotation).GetComponent<MoveUp>();
+
+                move.speed = move.speed * Mathf.Sqrt(1 + currentX * currentX);  //因为到中心点的距离是1，那么所有点的速度比例就和距离相同，直接乘上就行
+            }
+
+            eulerZ += 90;
+        }
+
+
+        
     }
 }

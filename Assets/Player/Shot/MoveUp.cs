@@ -56,7 +56,7 @@ public class MoveUp : MonoBehaviour
 
 
 
-    public void Rotation(float angle)
+    public void Rotate(float angle)
     {
         _transform.Rotate(_transform.forward, angle);
     }
