@@ -59,7 +59,7 @@ public class EnemyShot : MonoBehaviour
     void DoShot()
     {
         Vector2 shotPoint = new Vector2(Random.Range(-300, 300), Random.Range(0, 500));
-        _launcher.ShotRing(_bullet, shotPoint, BarrageBase.GetAimRotation(_transform.position, _playerTransform.position), 24);
+        _launcher.ShotRing(_bullet, shotPoint, BarrageBase.GetAimRotation(_transform.position, _playerTransform.position), 18);
 
         UpdateNextShot();
     }
