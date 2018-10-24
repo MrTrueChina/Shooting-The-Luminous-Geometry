@@ -24,7 +24,7 @@
  */
 
 
-public class EnemyMove : MonoBehaviour
+public class EnemyMove : EnemyMoveBase
 {
     [SerializeField]
     Border _moveBorder;

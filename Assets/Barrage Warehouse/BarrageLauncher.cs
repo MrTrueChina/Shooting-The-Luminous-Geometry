@@ -108,7 +108,7 @@ public class BarrageLauncher : MonoBehaviour
             Quaternion currentRotation = BarrageBase.GetAimRotation(Vector2.zero, new Vector2(currentX, 1));
             currentRotation.eulerAngles = currentRotation.eulerAngles + new Vector3(0, 0, eulerZ);
             
-            MoveUp move = Instantiate(bullet, position, currentRotation).GetComponent<MoveUp>();
+            BulletMoveUp move = Instantiate(bullet, position, currentRotation).GetComponent<BulletMoveUp>();
             
             move.speed = move.speed * Mathf.Sqrt(1 + currentX * currentX);  //因为到中心点的距离是1，那么所有点的速度比例就和距离相同，直接乘上就行
         }
@@ -135,7 +135,7 @@ public class BarrageLauncher : MonoBehaviour
                 Quaternion currentRotation = BarrageBase.GetAimRotation(Vector2.zero, new Vector2(currentX, 1));
                 currentRotation.eulerAngles = currentRotation.eulerAngles + new Vector3(0, 0, eulerZ);
 
-                MoveUp move = Instantiate(bullet, position, currentRotation).GetComponent<MoveUp>();
+                BulletMoveUp move = Instantiate(bullet, position, currentRotation).GetComponent<BulletMoveUp>();
 
                 move.speed = move.speed * Mathf.Sqrt(1 + currentX * currentX);  //因为到中心点的距离是1，那么所有点的速度比例就和距离相同，直接乘上就行
             }

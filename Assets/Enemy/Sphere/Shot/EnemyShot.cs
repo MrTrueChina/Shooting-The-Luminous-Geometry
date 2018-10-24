@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [RequireComponent(typeof(BarrageLauncher))]
-public class EnemyShot : MonoBehaviour
+public class EnemyShot : EnemyShotBase
 {
     [SerializeField]
     GameObject _bullet;

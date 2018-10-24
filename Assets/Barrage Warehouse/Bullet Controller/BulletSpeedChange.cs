@@ -3,7 +3,7 @@
 /// <summary>
 /// 改变子弹速度的脚本
 /// </summary>
-[RequireComponent(typeof(MoveUp))]
+[RequireComponent(typeof(BulletMoveUp))]
 public class BulletSpeedChange : BulletContorllerBase
 {
     public float startTime
@@ -30,7 +30,7 @@ public class BulletSpeedChange : BulletContorllerBase
     [SerializeField]
     float _targetSpeed;
 
-    MoveUp _bulletMove;
+    BulletMoveUp _bulletMove;
 
     float _startChangeTime;
     float _endChangeTime;
@@ -39,7 +39,7 @@ public class BulletSpeedChange : BulletContorllerBase
 
     private void Start()
     {
-        _bulletMove = GetComponent<MoveUp>();
+        _bulletMove = GetComponent<BulletMoveUp>();
 
         _startChangeTime = Time.time + _startTime;
         _endChangeTime = _startTime + _changeTime;

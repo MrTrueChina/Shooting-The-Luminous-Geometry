@@ -6,18 +6,21 @@ public class DragMove : MonoBehaviour
     Border _border;
 
     Transform _transform;
-
+    
+    bool _moving = false;
     Vector3 _lastMousePostion;
 
-    bool _moving = false;
 
 
+    //初始化
     private void Awake()
     {
         _transform = transform;
     }
 
 
+
+    //移动
     private void Update()
     {
         CheckMoving();
@@ -28,8 +31,7 @@ public class DragMove : MonoBehaviour
             UpdateLastMousePosition();
         }
     }
-
-
+    
     //启动和关闭
     void CheckMoving()
     {
@@ -49,8 +51,7 @@ public class DragMove : MonoBehaviour
     {
         _moving = false;
     }
-
-
+    
     //移动
     void Move()
     {
@@ -59,7 +60,6 @@ public class DragMove : MonoBehaviour
 
         _transform.position = moveToPosition;
     }
-
     Vector3 GetMouseDisplacement()          //displacement：[物]位移
     {
         Vector3 mouseDisplacement = GetMouseWorldPosition() - _lastMousePostion;
@@ -74,7 +74,6 @@ public class DragMove : MonoBehaviour
 
         return worldPoint;
     }
-
     Vector3 GetClampedPosition(Vector3 position)
     {
         float clampedX = Mathf.Clamp(position.x, _border.left, _border.right);
@@ -83,13 +82,13 @@ public class DragMove : MonoBehaviour
 
         return clampedPosition;
     }
-
-
+    
     //上一帧鼠标位置部分
     void UpdateLastMousePosition()
     {
         _lastMousePostion = GetMouseWorldPosition();
     }
+
 
 
 

@@ -3,7 +3,7 @@
 /// <summary>
 /// 控制子弹转向的组件（顺时针）
 /// </summary>
-[RequireComponent(typeof(MoveUp))]
+[RequireComponent(typeof(BulletMoveUp))]
 public class BulletRotate : BulletContorllerBase
 {
     public float startTime
@@ -30,7 +30,7 @@ public class BulletRotate : BulletContorllerBase
     [SerializeField]
     float _angle;
 
-    MoveUp _bulletMove;
+    BulletMoveUp _bulletMove;
 
     float _startRotateTime;
     float _endRotateTime;
@@ -40,7 +40,7 @@ public class BulletRotate : BulletContorllerBase
 
     private void Start()
     {
-        _bulletMove = GetComponent<MoveUp>();
+        _bulletMove = GetComponent<BulletMoveUp>();
 
         _startRotateTime = Time.time + _startTime;
         _originEulerZ = _bulletMove.rotation.eulerAngles.z;

@@ -4,20 +4,19 @@ public class PlayerShot : MonoBehaviour
 {
     [SerializeField]
     Transform[] _shotPoints;
-
     [SerializeField]
     GameObject _bullet;
-
     [SerializeField]
     float _shotInterval;
     
+    float _nextShotTime;
 
-    float _nextShot;
 
 
+    //射击
     private void Update()
     {
-        if (Time.time > _nextShot)
+        if (Time.time > _nextShotTime)
             Shot();
     }
 
@@ -26,10 +25,17 @@ public class PlayerShot : MonoBehaviour
         foreach(Transform shotPoint in _shotPoints)
             Instantiate(_bullet, shotPoint.position, shotPoint.rotation);
 
-        _nextShot = Time.time + _shotInterval;
+        UpdateNextShotTime();
+    }
+
+    void UpdateNextShotTime()
+    {
+        _nextShotTime = Time.time + _shotInterval;
     }
 
 
+
+    //Gizmo
     private void OnDrawGizmosSelected()
     {
         DrawTrajectory();

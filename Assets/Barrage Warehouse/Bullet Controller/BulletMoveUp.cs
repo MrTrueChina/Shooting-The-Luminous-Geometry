@@ -6,11 +6,10 @@
 
 using UnityEngine;
 
-public class MoveUp : MonoBehaviour
+public class BulletMoveUp : BulletContorllerBase
 {
     [SerializeField]
     Border _destroyBorder;
-
     public float speed
     {
         get { return _speed; }
@@ -18,35 +17,36 @@ public class MoveUp : MonoBehaviour
     }
     [SerializeField]
     float _speed;
-    
     public Quaternion rotation
     {
         get { return _transform.rotation; }
         set { _transform.rotation = value; }
     }
-
+    
     Transform _transform;
 
 
+
+    //初始化
     private void Awake()
     {
         _transform = transform;
     }
 
 
+
+    //移动
     private void Update()
     {
         Move();
         CheckAndDestroy();
     }
-
-
+    
     void Move()
     {
         _transform.Translate(Vector2.up * _speed * Time.deltaTime);
     }
-
-
+    
     void CheckAndDestroy()
     {
         if (OutOfBorder())
@@ -59,12 +59,12 @@ public class MoveUp : MonoBehaviour
 
 
 
+    //转向
     public void Rotate(float angle)
     {
         _transform.Rotate(_transform.forward, angle);
     }
-
-
+    
 
 
 
