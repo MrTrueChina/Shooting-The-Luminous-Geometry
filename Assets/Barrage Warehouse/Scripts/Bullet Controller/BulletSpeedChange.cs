@@ -56,14 +56,4 @@ public class BulletSpeedChange : BulletContorllerBase
         if (Time.time > _endChangeTime)
             Destroy(this);
     }
-
-
-    public override void CopyToGameobject(GameObject target)
-    {
-        BulletSpeedChange copy = target.AddComponent<BulletSpeedChange>();
-
-        copy.startTime = _startTime;
-        copy.changeTime = _changeTime;
-        copy.targetSpeed = _targetSpeed;
-    }
 }

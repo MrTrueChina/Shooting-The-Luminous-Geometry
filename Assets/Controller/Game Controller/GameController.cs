@@ -9,6 +9,7 @@
  *          最好是移动进场
  */
 
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameController : MonoBehaviour
@@ -25,6 +26,10 @@ public class GameController : MonoBehaviour
     Vector3 _playerEntrancePosition;
     [SerializeField]
     Vector3 _enemyEntrancePosition;
+    
+
+    List<GameObject> _enemys = new List<GameObject>();
+
 
 
     //选关（存入敌人预制）
@@ -50,13 +55,22 @@ public class GameController : MonoBehaviour
     {
         GameObject enemy = Instantiate(_enemyPrefab, _enemyEntrancePosition, Quaternion.identity);
         enemy.AddComponent<EnemyDieTransmitter>().gameController = this;
+        _enemys.Add(enemy);
     }
 
 
 
-    public void EnemyDie()
+    public void EnemyDie(GameObject enemy)
     {
+        _enemys.Remove(enemy);
+        if (_enemys.Count == 0)
+            PlayerWin();
         Debug.Log("Enemy Die");
+    }
+
+    void PlayerWin()
+    {
+        Debug.Log("WIN");
     }
 
 

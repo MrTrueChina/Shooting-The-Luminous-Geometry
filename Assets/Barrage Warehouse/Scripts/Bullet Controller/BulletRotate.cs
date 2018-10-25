@@ -62,14 +62,4 @@ public class BulletRotate : BulletContorllerBase
         if (Time.time > _endRotateTime)
             Destroy(this);
     }
-
-
-    public override void CopyToGameobject(GameObject target)
-    {
-        BulletRotate copy = target.AddComponent<BulletRotate>();
-
-        copy.startTime = _startTime;
-        copy.rotateTime = _rotateTime;
-        copy.angle = _angle;
-    }
 }

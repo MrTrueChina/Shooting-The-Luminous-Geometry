@@ -12,6 +12,6 @@ public class EnemyDieTransmitter : MonoBehaviour
 
     private void OnDestroy()
     {
-        _gameController.EnemyDie();
+        _gameController.EnemyDie(gameObject);
     }
 }
