@@ -38,6 +38,7 @@ GameObject:
   - component: {fileID: 114026269334970372}
   - component: {fileID: 114414317877080682}
   - component: {fileID: 114102915370473832}
+  - component: {fileID: 114295761815436568}
   m_Layer: 0
   m_Name: Straight
   m_TagString: Enemy Bullet
@@ -102,6 +103,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _radius: 7.5
   _checkCollision: 0
+--- !u!114 &114295761815436568
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1829913912689852}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea500a761d355814cb3d7e9276f9933f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _effectSprite: {fileID: 21300000, guid: 52c95a0163a7ac14f8f4ea13b673edfd, type: 3}
+  _effectStartDiameter: 150
+  _effectEndDiameter: 0
+  _effectTime: 0.1
 --- !u!114 &114414317877080682
 MonoBehaviour:
   m_ObjectHideFlags: 1

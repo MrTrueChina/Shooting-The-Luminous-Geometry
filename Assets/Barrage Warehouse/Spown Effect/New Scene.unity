@@ -249,6 +249,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea500a761d355814cb3d7e9276f9933f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _effectSprite: {fileID: 21300000, guid: 52c95a0163a7ac14f8f4ea13b673edfd, type: 3}
+  _effectStartDiameter: 10
+  _effectEndDiameter: 0
+  _effectTime: 0.1
 --- !u!212 &1755162300
 SpriteRenderer:
   m_ObjectHideFlags: 0
