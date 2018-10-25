@@ -653,8 +653,11 @@ MonoBehaviour:
     type: 2}
   _playerPrefab: {fileID: 1177440264204352, guid: 327a5e9eb2795c047a42db8ce2cc0934,
     type: 2}
+  _playerStartEntrancePosition: {x: 0, y: -700, z: 0}
   _playerEntrancePosition: {x: 0, y: -500, z: 0}
+  _enemyStartEntrancePosition: {x: 0, y: 700, z: 0}
   _enemyEntrancePosition: {x: 0, y: 400, z: 0}
+  _entranceTime: 2
 --- !u!4 &362359467
 Transform:
   m_ObjectHideFlags: 0
