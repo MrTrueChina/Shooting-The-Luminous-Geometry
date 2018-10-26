@@ -34,7 +34,7 @@ public class FissionRing : BulletContorllerBase
     float _doFissionTIme;
 
 
-    private void Start()
+    private void OnEnable()
     {
         _doFissionTIme = Time.time + _fissionTime;
     }
@@ -45,7 +45,7 @@ public class FissionRing : BulletContorllerBase
         if (Time.time > _doFissionTIme)
         {
             Fission();
-            Destroy(gameObject);
+            BarragePool.Set(gameObject);
         }
     }
 

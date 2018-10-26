@@ -49,7 +49,7 @@ public class SpownEffect : BulletContorllerBase
     }
     void CreatRenerer()
     {
-        GameObject effectObject = BarragePool.Get(_effectObjectPrefab,transform.position,transform.rotation);
+        GameObject effectObject = BarragePool.Get(_effectObjectPrefab, transform.position, transform.rotation);
         effectObject.transform.localScale = Vector3.one * _effectStartDiameter;
         _renderer = effectObject.GetComponent<SpriteRenderer>();
     }
@@ -59,24 +59,19 @@ public class SpownEffect : BulletContorllerBase
     private void Update()
     {
         UpdateDiameter();
-        UpdateTransparency();
 
         if (Time.time > _effectEndTime)
             EffectEnd();
     }
     void UpdateDiameter()
     {
-        float diameterRate = Mathf.Min(1, Mathf.InverseLerp(_effectStartTime, _effectEndTime, Time.time));
-        float diameter = Mathf.Lerp(_effectStartDiameter, _effectEndDiameter, diameterRate);
-        _renderer.transform.localScale = Vector3.one * diameter;
-    }
-    void UpdateTransparency()
-    {
-        float transparencyRate = Mathf.Min(1, Mathf.InverseLerp(_effectStartTime, _effectEndTime, Time.time));
-        float transparency = Mathf.Lerp(0, 2, transparencyRate);
+        float rate = Mathf.Min(1, Mathf.InverseLerp(_effectStartTime, _effectEndTime, Time.time));
 
-        Color spriteColor = new Color(_renderer.color.r, _renderer.color.g, _renderer.color.b, transparency);
-        _renderer.color = spriteColor;
+        float diameter = Mathf.Lerp(_effectStartDiameter, _effectEndDiameter, rate);
+        float transparency = Mathf.Lerp(0, 2, rate);
+
+        _renderer.transform.localScale = Vector3.one * diameter;
+        _renderer.color = new Color(_renderer.color.r, _renderer.color.g, _renderer.color.b, transparency);
     }
 
 
@@ -87,8 +82,7 @@ public class SpownEffect : BulletContorllerBase
         BarragePool.Set(_renderer.gameObject);
 
         EnableComponents();
-        //enabled = false;        //为了要扔进池里下次复用，这个组件不能销毁，改为关闭
-        //不对，不能关闭，不然复用的时候就无法启动了，这里需要优化
+        enabled = false;                        //为了要扔进池里下次复用，这个组件不能销毁，改为关闭
     }
     void EnableComponents()
     {

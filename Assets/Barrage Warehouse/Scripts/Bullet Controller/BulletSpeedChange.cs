@@ -37,10 +37,14 @@ public class BulletSpeedChange : BulletContorllerBase
     float _originSpeed;
 
 
-    private void Start()
+    private void Awake()
     {
         _bulletMove = GetComponent<BulletMoveUp>();
+    }
 
+
+    private void OnEnable()
+    {
         _startChangeTime = Time.time + _startTime;
         _endChangeTime = _startTime + _changeTime;
         _originSpeed = _bulletMove.speed;
@@ -54,6 +58,6 @@ public class BulletSpeedChange : BulletContorllerBase
         _bulletMove.speed = Mathf.Lerp(_originSpeed, _targetSpeed, Mathf.Min(1, Mathf.InverseLerp(_startChangeTime, _endChangeTime, Time.time)));
 
         if (Time.time > _endChangeTime)
-            Destroy(this);
+            enabled = false;
     }
 }

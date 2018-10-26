@@ -117,8 +117,8 @@ MonoBehaviour:
   _effectObjectPrefab: {fileID: 1859996535275656, guid: c86ad1d3c7cd85246a8c5e07c8ba3a0d,
     type: 2}
   _effectSprite: {fileID: 21300000, guid: 52c95a0163a7ac14f8f4ea13b673edfd, type: 3}
-  _effectStartDiameter: 150
-  _effectEndDiameter: 0
+  _effectStartDiameter: 180
+  _effectEndDiameter: 60
   _effectTime: 1
 --- !u!114 &114414317877080682
 MonoBehaviour:

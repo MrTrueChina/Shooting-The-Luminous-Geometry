@@ -37,17 +37,33 @@ public class BarragePool : MonoBehaviour
                 return bullet;
             }
         }
-        GameObject newBullet = Instantiate(prefab);
-        newBullet.name = prefab.name;
-        return newBullet;
+        return null;
     }
 
     public static GameObject Get(GameObject prefab, Vector3 position, Quaternion rotation)
     {
         GameObject newBullet = Get(prefab);
-        newBullet.transform.position = position;
-        newBullet.transform.rotation = rotation;
-        newBullet.SetActive(true);
+
+        if (newBullet == null)
+        {
+            newBullet = Instantiate(prefab, position, rotation);
+            newBullet.name = prefab.name;
+        }
+        else
+        {
+            newBullet.transform.position = position;
+            newBullet.transform.rotation = rotation;
+            EnableAllBullerController(newBullet);               //子弹控制器都是生效完毕后关闭，为了功能正常只能在复用时全部启动了
+            newBullet.SetActive(true);                          //在子弹控制器全部启动后再激活子弹，这是因为子弹生成特效抢先一步关闭其他组件，之后其他组件又被启动，就不能再次关闭了，子弹会在特效播放完毕前就飞出去
+        }
+
+
         return newBullet;
+    }
+    static void EnableAllBullerController(GameObject bullet)
+    {
+        BulletContorllerBase[] components = bullet.GetComponents<BulletContorllerBase>();
+        foreach (BulletContorllerBase component in components)
+            component.enabled = true;
     }
 }

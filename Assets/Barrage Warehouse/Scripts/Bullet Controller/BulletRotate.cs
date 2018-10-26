@@ -38,14 +38,19 @@ public class BulletRotate : BulletContorllerBase
     float _targetEulerZ;
 
 
-    private void Start()
+    private void Awake()
     {
         _bulletMove = GetComponent<BulletMoveUp>();
+    }
 
+
+    private void OnEnable()
+    {
         _startRotateTime = Time.time + _startTime;
+        _endRotateTime = _startTime + _rotateTime;
+
         _originEulerZ = _bulletMove.rotation.eulerAngles.z;
         _targetEulerZ = _originEulerZ - _angle;
-        _endRotateTime = _startTime + _rotateTime;
     }
 
 
@@ -60,6 +65,6 @@ public class BulletRotate : BulletContorllerBase
         _bulletMove.rotation = rotation;
 
         if (Time.time > _endRotateTime)
-            Destroy(this);
+            enabled = false;
     }
 }
