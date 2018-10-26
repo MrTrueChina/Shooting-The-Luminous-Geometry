@@ -50,7 +50,7 @@ public class BulletMoveUp : BulletContorllerBase
     void CheckAndDestroy()
     {
         if (OutOfBorder())
-            Destroy(gameObject);
+            BarragePool.Set(gameObject);
     }
     bool OutOfBorder()
     {

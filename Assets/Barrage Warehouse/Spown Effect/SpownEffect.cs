@@ -14,6 +14,8 @@ public class SpownEffect : BulletContorllerBase
      *  特效是一定时间内的渐显和缩小
      */
     [SerializeField]
+    GameObject _effectObjectPrefab;
+    [SerializeField]
     Sprite _effectSprite;
     [SerializeField]
     float _effectStartDiameter;
@@ -28,8 +30,8 @@ public class SpownEffect : BulletContorllerBase
     float _effectEndTime;
 
 
-    //关闭所有控制器、创建特效物体
-    private void Start()
+    //关闭所有控制器、创建特效物体、计算特效时间
+    private void OnEnable()
     {
         DisableBulletControllers();
         CreatRenerer();
@@ -47,10 +49,9 @@ public class SpownEffect : BulletContorllerBase
     }
     void CreatRenerer()
     {
-        GameObject effectObject = new GameObject("Effect Object");
-        effectObject.transform.position = transform.position;
+        GameObject effectObject = BarragePool.Get(_effectObjectPrefab,transform.position,transform.rotation);
         effectObject.transform.localScale = Vector3.one * _effectStartDiameter;
-        _renderer = effectObject.AddComponent<SpriteRenderer>();
+        _renderer = effectObject.GetComponent<SpriteRenderer>();
     }
 
 
@@ -83,10 +84,11 @@ public class SpownEffect : BulletContorllerBase
     //特效播放完毕，销毁特效物体，启动所有控制器，销毁特效脚本
     void EffectEnd()
     {
-        Destroy(_renderer.gameObject);
+        BarragePool.Set(_renderer.gameObject);
 
         EnableComponents();
-        Destroy(this);
+        //enabled = false;        //为了要扔进池里下次复用，这个组件不能销毁，改为关闭
+        //不对，不能关闭，不然复用的时候就无法启动了，这里需要优化
     }
     void EnableComponents()
     {

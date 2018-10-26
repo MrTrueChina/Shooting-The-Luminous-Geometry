@@ -23,7 +23,7 @@ public class PlayerShot : MonoBehaviour
     void Shot()
     {
         foreach(Transform shotPoint in _shotPoints)
-            Instantiate(_bullet, shotPoint.position, shotPoint.rotation);
+            BarragePool.Get(_bullet, shotPoint.position, shotPoint.rotation);
 
         UpdateNextShotTime();
     }

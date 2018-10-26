@@ -18,18 +18,16 @@ public class UIController : MonoBehaviour
 
     public void PlayButtonDown()
     {
-        //此处应该接选关，但选关还不完善，接开始
-        StartGame();
+        _selectLevelCanvas.SetActive(true);
+        InactiveOtherCanvas(_selectLevelCanvas);
     }
 
 
 
-    void StartGame()
+    public void StartGame()
     {
         _gameController.StartGame();
-
-        _mainMenuCanvas.SetActive(false);       //这句在流程完成后多余
-        _selectLevelCanvas.SetActive(false);
+        InactiveAllCanvas();
     }
 
 
@@ -37,29 +35,53 @@ public class UIController : MonoBehaviour
     public void OpenRestartCanvas()
     {
         _restartCanvas.SetActive(true);
+        InactiveOtherCanvas(_restartCanvas);
     }
 
 
 
     public void RestartButtonDown()
     {
-        Restart();
-    }
-
-    void Restart()
-    {
         _gameController.StartGame();
-
-        _restartCanvas.SetActive(false);
+        InactiveAllCanvas();
     }
+
 
 
     public void MainMenuButtonDown()
     {
         _mainMenuCanvas.SetActive(true);
+        InactiveOtherCanvas(_mainMenuCanvas);
+    }
 
-        _pauseCanvas.SetActive(false);
-        _restartCanvas.SetActive(false);
+
+
+    public void OpenPauseCanvas()
+    {
+        _pauseCanvas.SetActive(true);
+        InactiveOtherCanvas(_pauseCanvas);
+    }
+
+
+
+
+    void InactiveOtherCanvas(GameObject activeCanvas)
+    {
+        if (activeCanvas != _mainMenuCanvas)
+            _mainMenuCanvas.SetActive(false);
+        if (activeCanvas != _selectLevelCanvas)
+            _selectLevelCanvas.SetActive(false);
+        if (activeCanvas != _restartCanvas)
+            _restartCanvas.SetActive(false);
+        if (activeCanvas != _pauseCanvas)
+            _pauseCanvas.SetActive(false);
+    }
+
+    void InactiveAllCanvas()
+    {
+        _mainMenuCanvas.SetActive(false);
         _selectLevelCanvas.SetActive(false);
+        _restartCanvas.SetActive(false);
+        _pauseCanvas.SetActive(false);
     }
 }

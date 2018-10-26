@@ -10,6 +10,6 @@ public class Damage : MonoBehaviour
     {
         life.TakeDamage(_damage);
 
-        Destroy(gameObject);
+        BarragePool.Set(gameObject);
     }
 }

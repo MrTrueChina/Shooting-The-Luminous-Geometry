@@ -26,7 +26,6 @@ public class EnemyShot : EnemyShotBase
     private void Start()
     {
         FindPlayer();
-        _launcher.StartShotScrew(_bullet,_transform,Quaternion.identity,360,10,0.05f);
     }
     void FindPlayer()
     {

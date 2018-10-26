@@ -114,10 +114,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea500a761d355814cb3d7e9276f9933f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _effectObjectPrefab: {fileID: 1859996535275656, guid: c86ad1d3c7cd85246a8c5e07c8ba3a0d,
+    type: 2}
   _effectSprite: {fileID: 21300000, guid: 52c95a0163a7ac14f8f4ea13b673edfd, type: 3}
   _effectStartDiameter: 150
   _effectEndDiameter: 0
-  _effectTime: 0.1
+  _effectTime: 1
 --- !u!114 &114414317877080682
 MonoBehaviour:
   m_ObjectHideFlags: 1
