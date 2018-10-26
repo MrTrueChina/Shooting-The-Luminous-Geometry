@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-[RequireComponent(typeof(BarrageLauncher))]
+
 public class EnemyShot : EnemyShotBase
 {
     [SerializeField]
@@ -8,8 +8,7 @@ public class EnemyShot : EnemyShotBase
 
     [SerializeField]
     float _shotInterval;
-
-    BarrageLauncher _launcher;
+    
     Transform _transform;
     Transform _playerTransform;
 
@@ -18,7 +17,6 @@ public class EnemyShot : EnemyShotBase
 
     private void Awake()
     {
-        _launcher = GetComponent<BarrageLauncher>();
         _transform = transform;
     }
 
@@ -58,7 +56,7 @@ public class EnemyShot : EnemyShotBase
     void DoShot()
     {
         Vector2 shotPoint = new Vector2(Random.Range(-300, 300), Random.Range(0, 500));
-        _launcher.ShotRing(_bullet, shotPoint, BarrageBase.GetAimRotation(_transform.position, _playerTransform.position), 18);
+        BarrageLauncher.ShotRing(_bullet, shotPoint, BarrageBase.GetAimRotation(_transform.position, _playerTransform.position), 18);
 
         UpdateNextShot();
     }

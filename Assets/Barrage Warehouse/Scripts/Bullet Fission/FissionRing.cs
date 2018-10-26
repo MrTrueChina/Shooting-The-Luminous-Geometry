@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 
-[RequireComponent(typeof(BarrageLauncher))]
 /// <summary>
 /// 分裂出环装弹幕
 /// </summary>
@@ -52,6 +51,6 @@ public class FissionRing : BulletContorllerBase
 
     void Fission()
     {
-        GetComponent<BarrageLauncher>().ShotRing(_bullet, transform.position, transform.rotation, _bulletsNumber);
+        BarrageLauncher.ShotRing(_bullet, transform.position, transform.rotation, _bulletsNumber);
     }
 }

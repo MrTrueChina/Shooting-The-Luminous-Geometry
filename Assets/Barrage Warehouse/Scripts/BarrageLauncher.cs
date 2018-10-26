@@ -10,7 +10,7 @@ public class BarrageLauncher : MonoBehaviour
     /// <param name="bullet"></param>
     /// <param name="position"></param>
     /// <param name="rotation"></param>
-    public GameObject ShotABullet(GameObject bullet, Vector3 position, Quaternion rotation)
+    public static GameObject ShotABullet(GameObject bullet, Vector3 position, Quaternion rotation)
     {
         return BarragePool.Get(bullet, position, rotation);
     }
@@ -23,7 +23,7 @@ public class BarrageLauncher : MonoBehaviour
     /// <param name="rotation"></param>
     /// <param name="bulletsNumber"></param>
     /// <param name="angle"></param>
-    public GameObject[] ShotFanShapedBullets(GameObject bullet, Vector3 position, Quaternion rotation, int bulletsNumber, float angle)
+    public static GameObject[] ShotFanShapedBullets(GameObject bullet, Vector3 position, Quaternion rotation, int bulletsNumber, float angle)
     {
         List<GameObject> bullets = new List<GameObject>();
 
@@ -50,7 +50,7 @@ public class BarrageLauncher : MonoBehaviour
     /// <param name="position"></param>
     /// <param name="rotation"></param>
     /// <param name="bulletNumber"></param>
-    public GameObject[] ShotRing(GameObject bullet, Vector3 position, Quaternion rotation, int bulletsNumber)
+    public static GameObject[] ShotRing(GameObject bullet, Vector3 position, Quaternion rotation, int bulletsNumber)
     {
         List<GameObject> bullets = new List<GameObject>();
 
@@ -75,7 +75,7 @@ public class BarrageLauncher : MonoBehaviour
     /// <param name="bullet"></param>
     /// <param name="position"></param>
     /// <param name="ratation"></param>
-    public void ShotCross(GameObject bullet, Vector3 position, Quaternion rotation)
+    public static void ShotCross(GameObject bullet, Vector3 position, Quaternion rotation)
     {
         ShotRing(bullet, position, rotation, 4);
     }
@@ -88,7 +88,7 @@ public class BarrageLauncher : MonoBehaviour
     /// <param name="rotation"></param>
     /// <param name="bulletsNumber"></param>
     /// <param name="angle"></param>
-    public void ShotTransverselyLine(GameObject bullet, Vector3 position, Quaternion rotation, int bulletsNumber, float angle)
+    public static void ShotTransverselyLine(GameObject bullet, Vector3 position, Quaternion rotation, int bulletsNumber, float angle)
     {
         /*
          *  要发射横行必须计算速度，用模拟横行距离的方式进行计算
@@ -121,7 +121,7 @@ public class BarrageLauncher : MonoBehaviour
     /// <param name="position"></param>
     /// <param name="rotation"></param>
     /// <param name="bulletsNumberASide"></param>
-    public void ShotPane(GameObject bullet, Vector3 position, Quaternion rotation, int bulletsNumberASide)
+    public static void ShotPane(GameObject bullet, Vector3 position, Quaternion rotation, int bulletsNumberASide)
     {
         float length = Mathf.Tan(90 * Mathf.Deg2Rad / 2) * 2;    //数字横行的长度
         float eulerZ = rotation.eulerAngles.z;
@@ -158,7 +158,7 @@ public class BarrageLauncher : MonoBehaviour
     /// <param name="deltaAngle"></param>
     /// <param name="shotInterval"></param>
     /// <returns></returns>
-    public IEnumerator ShotScrew(GameObject bullet, Vector3 position, Quaternion startRotation, int bulletsNumber, float deltaAngle, float shotInterval)
+    public static IEnumerator ShotScrew(GameObject bullet, Vector3 position, Quaternion startRotation, int bulletsNumber, float deltaAngle, float shotInterval)
     {
         float startEulerZ = startRotation.eulerAngles.z;
 
@@ -174,9 +174,9 @@ public class BarrageLauncher : MonoBehaviour
             yield return waitForNextShot;
         }
     }
-    public void StartShotScrew(GameObject bullet, Transform transform, Quaternion startRotation, int bulletsNumber, float deltaAngle, float shotInterval)
+    public static void StartShotScrew(GameObject bullet, Transform transform, Quaternion startRotation, int bulletsNumber, float deltaAngle, float shotInterval)
     {
-        StartCoroutine(ShotScrew(bullet, transform, startRotation, bulletsNumber, deltaAngle, shotInterval));
+        //StartCoroutine(ShotScrew(bullet, transform, startRotation, bulletsNumber, deltaAngle, shotInterval));
     }
     /// <summary>
     /// 发射螺旋弹幕
@@ -188,7 +188,7 @@ public class BarrageLauncher : MonoBehaviour
     /// <param name="deltaAngle"></param>
     /// <param name="shotInterval"></param>
     /// <returns></returns>
-    public IEnumerator ShotScrew(GameObject bullet, Transform transform, Quaternion startRotation, int bulletsNumber, float deltaAngle, float shotInterval)
+    public static IEnumerator ShotScrew(GameObject bullet, Transform transform, Quaternion startRotation, int bulletsNumber, float deltaAngle, float shotInterval)
     {
         float startEulerZ = startRotation.eulerAngles.z;
 
