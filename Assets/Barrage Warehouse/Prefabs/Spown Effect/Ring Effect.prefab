@@ -20,8 +20,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4462734599236204}
   - component: {fileID: 212542227554704620}
+  - component: {fileID: 114551066771446690}
   m_Layer: 0
-  m_Name: Effect Object
+  m_Name: Ring Effect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -40,6 +41,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114551066771446690
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1859996535275656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea500a761d355814cb3d7e9276f9933f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _effectTime: 1
+  _renderer: {fileID: 212542227554704620}
+  _effectStartDiameter: 10
+  _effectEndDiameter: 0
+  _effectStartTransparency: 0
+  _effectEndTransparency: 2
 --- !u!212 &212542227554704620
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -74,13 +92,13 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 52c95a0163a7ac14f8f4ea13b673edfd, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.32, y: 0.32}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0

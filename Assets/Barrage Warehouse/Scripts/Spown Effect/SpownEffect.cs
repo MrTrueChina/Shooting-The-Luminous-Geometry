@@ -1,31 +1,34 @@
 ﻿using UnityEngine;
 
-public class SpownEffectObject : MonoBehaviour
+public class SpownEffect : SpownEffectBase
 {
     [SerializeField]
     SpriteRenderer _renderer;
 
     Sprite _effectSprite;
 
+    [SerializeField]
     float _effectStartDiameter;
+    [SerializeField]
     float _effectEndDiameter;
+
+    [SerializeField]
+    float _effectStartTransparency;
+    [SerializeField]
+    float _effectEndTransparency;
 
     float _effectStartTime;
     float _effectEndTime;
 
 
-    //存入数据、计算特效时间
-    public void SetEffectData(Sprite sprite,float startDiameter,float endDiameter, float effectTime)
+
+    //初始化
+    private void OnEnable()
     {
-        _renderer.sprite = sprite;
-
-        _effectStartDiameter = startDiameter;
-        _effectEndDiameter = endDiameter;
-
-        transform.localScale = Vector3.one * startDiameter;
+        transform.localScale = Vector3.one * _effectStartDiameter;
 
         _effectStartTime = Time.time;
-        _effectEndTime = _effectStartTime + effectTime;
+        _effectEndTime = _effectStartTime + effectTIme;
     }
 
 
@@ -43,7 +46,7 @@ public class SpownEffectObject : MonoBehaviour
         float rate = Mathf.Min(1, Mathf.InverseLerp(_effectStartTime, _effectEndTime, Time.time));
 
         float diameter = Mathf.Lerp(_effectStartDiameter, _effectEndDiameter, rate);
-        float transparency = Mathf.Lerp(0, 2, rate);
+        float transparency = Mathf.Lerp(_effectStartTransparency, _effectEndTransparency, rate);
 
         transform.localScale = Vector3.one * diameter;
         _renderer.color = new Color(_renderer.color.r, _renderer.color.g, _renderer.color.b, transparency);

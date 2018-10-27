@@ -10,10 +10,19 @@ public class BarrageLauncher : MonoBehaviour
     /// <param name="bullet"></param>
     /// <param name="position"></param>
     /// <param name="rotation"></param>
-    public static GameObject ShotABullet(GameObject bullet, Vector3 position, Quaternion rotation)
+    public GameObject ShotABullet(GameObject bullet, Vector3 position, Quaternion rotation)
     {
         return BarragePool.Get(bullet, position, rotation);
     }
+    /*
+    static IEnumerator DoShotABullet(GameObject bullet, Vector3 position, Quaternion rotation)
+    {
+        outBullet = BarragePool.Get(bullet, position, rotation);
+        GameObject effectPrefab = GetSpownEffectPrefab(outBullet);
+        if(effectPrefab != null)
+            yield return new WaitForSeconds(effectPrefab.GetComponent<SpownEffectBase>().effectTIme);
+    }
+    */
 
     /// <summary>
     /// 发射扇形子弹
@@ -203,5 +212,24 @@ public class BarrageLauncher : MonoBehaviour
 
             yield return waitForNextShot;
         }
+    }
+
+
+
+
+
+
+
+    /// <summary>
+    /// 获取子弹预制的生成特效物体预制
+    /// </summary>
+    /// <param name="bulletPrefab"></param>
+    /// <returns></returns>
+    static GameObject GetSpownEffectPrefab(GameObject bulletPrefab)
+    {
+        SpownEffectContainer spownEffectContainer = bulletPrefab.GetComponent<SpownEffectContainer>();
+        if (spownEffectContainer != null)
+            return spownEffectContainer.effectPrefab;
+        return null;
     }
 }

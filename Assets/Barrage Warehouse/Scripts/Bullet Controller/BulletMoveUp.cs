@@ -26,11 +26,15 @@ public class BulletMoveUp : BulletContorllerBase
     Transform _transform;
 
 
+    float _originSpeed;      //最初始的速度，因为有改变速度的控制器，所以要在入库的时候把速度改回来
+
+
 
     //初始化
     private void Awake()
     {
         _transform = transform;
+        _originSpeed = _speed;
     }
 
 
@@ -50,11 +54,25 @@ public class BulletMoveUp : BulletContorllerBase
     void CheckAndDestroy()
     {
         if (OutOfBorder())
-            BarragePool.Set(gameObject);
+            SetToPool();
     }
     bool OutOfBorder()
     {
         return _transform.position.x > _destroyBorder.right || _transform.position.x < _destroyBorder.left || _transform.position.y > _destroyBorder.top || _transform.position.y < _destroyBorder.bottom;
+    }
+
+
+
+    //存入池
+    void SetToPool()
+    {
+        Reinitialize();
+        BarragePool.Set(gameObject);
+    }
+    
+    void Reinitialize()             //重新初始化，有些数值会被控制器修改，在入库时需要把数值回归到最初状态
+    {
+        _speed = _originSpeed;
     }
 
 
