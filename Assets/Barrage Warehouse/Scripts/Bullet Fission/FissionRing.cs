@@ -33,22 +33,25 @@ public class FissionRing : BulletContorllerBase
     float _doFissionTIme;
 
 
+    //数据准备
     private void OnEnable()
     {
         _doFissionTIme = Time.time + _fissionTime;
     }
 
 
+    //检测时间
     private void Update()
     {
         if (Time.time > _doFissionTIme)
         {
             Fission();
-            BarragePool.Set(gameObject);
+            Pool.SetBullet(gameObject);
         }
     }
 
 
+    //分裂
     void Fission()
     {
         BarrageLauncher.ShotRing(_bullet, transform.position, transform.rotation, _bulletsNumber);

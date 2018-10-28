@@ -193,4 +193,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _bullet: {fileID: 1829913912689852, guid: 49fd23e09c058084bbd49a8467e02ca9, type: 2}
-  _shotInterval: 0.5
+  _shotInterval: 1

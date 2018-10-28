@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// 控制子弹转向的组件（顺时针）
+/// 控制子弹转向的组件（顺时针），有缺陷，因为旋转用的是Lerp，所以如果两个旋转组件同时作用就会导致后执行的覆盖先执行的，需要时进行改进，很简单，移动控制器已经留了转向接口
 /// </summary>
 [RequireComponent(typeof(BulletMoveUp))]
 public class BulletRotate : BulletContorllerBase
@@ -66,5 +66,12 @@ public class BulletRotate : BulletContorllerBase
 
         if (Time.time > _endRotateTime)
             enabled = false;
+    }
+
+
+    //复位
+    public override void Restore()
+    {
+        enabled = true;
     }
 }

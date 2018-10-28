@@ -1,11 +1,8 @@
-﻿/*
- *  移动，需要越界销毁
- *  
- *  需要速度、方向、转向接口
- */
+﻿using UnityEngine;
 
-using UnityEngine;
-
+/// <summary>
+/// 控制子弹移动的组件
+/// </summary>
 public class BulletMoveUp : BulletContorllerBase
 {
     [SerializeField]
@@ -39,11 +36,11 @@ public class BulletMoveUp : BulletContorllerBase
 
 
 
-    //移动
+    //移动和越界检测
     private void Update()
     {
         Move();
-        CheckAndDestroy();
+        CheckAndSetToPool();
     }
     
     void Move()
@@ -51,10 +48,10 @@ public class BulletMoveUp : BulletContorllerBase
         _transform.Translate(Vector2.up * _speed * Time.deltaTime);
     }
     
-    void CheckAndDestroy()
+    void CheckAndSetToPool()
     {
         if (OutOfBorder())
-            SetToPool();
+            Pool.SetBullet(gameObject);
     }
     bool OutOfBorder()
     {
@@ -63,24 +60,18 @@ public class BulletMoveUp : BulletContorllerBase
 
 
 
-    //存入池
-    void SetToPool()
-    {
-        Reinitialize();
-        BarragePool.Set(gameObject);
-    }
-    
-    void Reinitialize()             //重新初始化，有些数值会被控制器修改，在入库时需要把数值回归到最初状态
-    {
-        _speed = _originSpeed;
-    }
-
-
-
     //转向
     public void Rotate(float angle)
     {
         _transform.Rotate(_transform.forward, angle);
+    }
+
+
+    
+    //复位
+    public override void Restore()
+    {
+        _speed = _originSpeed;
     }
     
 

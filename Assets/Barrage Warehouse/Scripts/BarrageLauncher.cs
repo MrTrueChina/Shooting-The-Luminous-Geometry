@@ -14,19 +14,31 @@ public class BarrageLauncher : MonoBehaviour
     {
         StaticCoroutine.Start(DoShotABullet(bullet, position, rotation));
     }
+
     static IEnumerator DoShotABullet(GameObject bulletPrefab, Vector3 position, Quaternion rotation)
     {
         GameObject effectPrefab = GetSpownEffectPrefab(bulletPrefab);
+        
+        if (effectPrefab != null)
+            yield return StaticCoroutine.Start(ShotABulletWithSpownEffect(bulletPrefab, effectPrefab, position, rotation));
+        else
+            yield return ShotABulletWithOutEffect(bulletPrefab, position, rotation);
+    }
 
-        GameObject bullet = BarragePool.Get(bulletPrefab, position, rotation);
+    static IEnumerator ShotABulletWithSpownEffect(GameObject bulletPrefab, GameObject effectPrefab, Vector3 position, Quaternion rotation)
+    {
+        GameObject bullet = ShotABulletWithOutEffect(bulletPrefab, position, rotation);
         bullet.SetActive(false);
 
-        if (effectPrefab != null)
-        {
-            BarragePool.Get(effectPrefab, position, rotation);
-            yield return new WaitForSeconds(effectPrefab.GetComponent<SpownEffectBase>().effectTIme);
-        }
+        GameObject effectObject = Pool.Get(effectPrefab, position, rotation);
+        yield return new WaitForSeconds(GetSpownEffectTime(effectObject));
+
         bullet.SetActive(true);
+    }
+
+    static GameObject ShotABulletWithOutEffect(GameObject bulletPrefab, Vector3 position, Quaternion rotation)
+    {
+        return Pool.Get(bulletPrefab, position, rotation);
     }
     
 
@@ -50,7 +62,7 @@ public class BarrageLauncher : MonoBehaviour
             Quaternion currentRotation = new Quaternion();
             currentRotation.eulerAngles = eulerAngle;
 
-            bullets.Add(BarragePool.Get(bullet, position, currentRotation));
+            bullets.Add(Pool.Get(bullet, position, currentRotation));
 
             eulerAngle.z += angle / (bulletsNumber - 1);
         }
@@ -76,7 +88,7 @@ public class BarrageLauncher : MonoBehaviour
             Quaternion currentRotation = new Quaternion();
             currentRotation.eulerAngles = eulerAngle;
 
-            bullets.Add(BarragePool.Get(bullet, position, currentRotation));
+            bullets.Add(Pool.Get(bullet, position, currentRotation));
 
             eulerAngle.z += 360f / bulletsNumber;
         }
@@ -93,7 +105,7 @@ public class BarrageLauncher : MonoBehaviour
     {
         GameObject effectPrefab = bulletPrefab.GetComponent<SpownEffectContainer>().effectPrefab;
         float effectTime = effectPrefab.GetComponent<SpownEffectBase>().effectTIme;
-        BarragePool.Get(effectPrefab, position, rotation);
+        Pool.Get(effectPrefab, position, rotation);
 
         List<GameObject> bullets = new List<GameObject>();
         Vector3 eulerAngle = rotation.eulerAngles;
@@ -114,7 +126,7 @@ public class BarrageLauncher : MonoBehaviour
             Quaternion currentRotation = new Quaternion();
             currentRotation.eulerAngles = eulerAngle;
 
-            GameObject bullet = BarragePool.Get(bulletPrefab, position, currentRotation);
+            GameObject bullet = Pool.Get(bulletPrefab, position, currentRotation);
             bullet.SetActive(false);
             bullets.Add(bullet);
 
@@ -167,7 +179,7 @@ public class BarrageLauncher : MonoBehaviour
             Quaternion currentRotation = BarrageBase.GetAimRotation(Vector2.zero, new Vector2(currentX, 1));
             currentRotation.eulerAngles = currentRotation.eulerAngles + new Vector3(0, 0, eulerZ);
             
-            BulletMoveUp move = BarragePool.Get(bullet, position, currentRotation).GetComponent<BulletMoveUp>();
+            BulletMoveUp move = Pool.Get(bullet, position, currentRotation).GetComponent<BulletMoveUp>();
             
             move.speed = move.speed * Mathf.Sqrt(1 + currentX * currentX);  //因为到中心点的距离是1，那么所有点的速度比例就和距离相同，直接乘上就行
         }
@@ -194,7 +206,7 @@ public class BarrageLauncher : MonoBehaviour
                 Quaternion currentRotation = BarrageBase.GetAimRotation(Vector2.zero, new Vector2(currentX, 1));
                 currentRotation.eulerAngles = currentRotation.eulerAngles + new Vector3(0, 0, eulerZ);
 
-                BulletMoveUp move = BarragePool.Get(bullet, position, currentRotation).GetComponent<BulletMoveUp>();
+                BulletMoveUp move = Pool.Get(bullet, position, currentRotation).GetComponent<BulletMoveUp>();
 
                 move.speed = move.speed * Mathf.Sqrt(1 + currentX * currentX);  //因为到中心点的距离是1，那么所有点的速度比例就和距离相同，直接乘上就行
             }
@@ -228,7 +240,7 @@ public class BarrageLauncher : MonoBehaviour
             Quaternion rotation = new Quaternion();
             rotation.eulerAngles = new Vector3(0, 0, startEulerZ + deltaAngle * i);
 
-            BarragePool.Get(bullet, position, rotation);
+            Pool.Get(bullet, position, rotation);
 
             yield return waitForNextShot;
         }
@@ -258,7 +270,7 @@ public class BarrageLauncher : MonoBehaviour
             Quaternion rotation = new Quaternion();
             rotation.eulerAngles = new Vector3(0, 0, startEulerZ - deltaAngle * i);
 
-            BarragePool.Get(bullet, transform.position, rotation);
+            Pool.Get(bullet, transform.position, rotation);
 
             yield return waitForNextShot;
         }
@@ -281,5 +293,15 @@ public class BarrageLauncher : MonoBehaviour
         if (spownEffectContainer != null)
             return spownEffectContainer.effectPrefab;
         return null;
+    }
+
+    /// <summary>
+    /// 获取特效物体的特效执行时间
+    /// </summary>
+    /// <param name="effectObject"></param>
+    /// <returns></returns>
+    static float GetSpownEffectTime(GameObject effectObject)
+    {
+        return effectObject.GetComponent<SpownEffectBase>().effectTIme;
     }
 }

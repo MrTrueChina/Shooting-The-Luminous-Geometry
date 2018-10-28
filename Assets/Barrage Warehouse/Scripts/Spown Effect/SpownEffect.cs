@@ -56,9 +56,9 @@ public class SpownEffect : SpownEffectBase
 
 
 
-    //特效播放完毕，销毁特效物体，启动所有控制器，销毁特效脚本
+    //特效播放完毕，存入池
     void EffectEnd()
     {
-        BarragePool.Set(gameObject);
+        Pool.Set(gameObject);
     }
 }
