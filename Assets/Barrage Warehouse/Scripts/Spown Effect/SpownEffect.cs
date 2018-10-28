@@ -29,6 +29,8 @@ public class SpownEffect : SpownEffectBase
 
         _effectStartTime = Time.time;
         _effectEndTime = _effectStartTime + effectTIme;
+
+        UpdateEffect();
     }
 
 
@@ -36,12 +38,12 @@ public class SpownEffect : SpownEffectBase
     //播放特效
     private void Update()
     {
-        UpdateDiameter();
+        UpdateEffect();
 
         if (Time.time > _effectEndTime)
             EffectEnd();
     }
-    void UpdateDiameter()
+    void UpdateEffect()
     {
         float rate = Mathf.Min(1, Mathf.InverseLerp(_effectStartTime, _effectEndTime, Time.time));
 

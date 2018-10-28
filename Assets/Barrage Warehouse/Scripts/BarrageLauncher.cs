@@ -10,19 +10,25 @@ public class BarrageLauncher : MonoBehaviour
     /// <param name="bullet"></param>
     /// <param name="position"></param>
     /// <param name="rotation"></param>
-    public GameObject ShotABullet(GameObject bullet, Vector3 position, Quaternion rotation)
+    public static void NewShotABullet(GameObject bullet, Vector3 position, Quaternion rotation)
     {
-        return BarragePool.Get(bullet, position, rotation);
+        StaticCoroutine.Start(DoShotABullet(bullet, position, rotation));
     }
-    /*
-    static IEnumerator DoShotABullet(GameObject bullet, Vector3 position, Quaternion rotation)
+    static IEnumerator DoShotABullet(GameObject bulletPrefab, Vector3 position, Quaternion rotation)
     {
-        outBullet = BarragePool.Get(bullet, position, rotation);
-        GameObject effectPrefab = GetSpownEffectPrefab(outBullet);
-        if(effectPrefab != null)
+        GameObject effectPrefab = GetSpownEffectPrefab(bulletPrefab);
+
+        GameObject bullet = BarragePool.Get(bulletPrefab, position, rotation);
+        bullet.SetActive(false);
+
+        if (effectPrefab != null)
+        {
+            BarragePool.Get(effectPrefab, position, rotation);
             yield return new WaitForSeconds(effectPrefab.GetComponent<SpownEffectBase>().effectTIme);
+        }
+        bullet.SetActive(true);
     }
-    */
+    
 
     /// <summary>
     /// 发射扇形子弹
@@ -76,6 +82,50 @@ public class BarrageLauncher : MonoBehaviour
         }
 
         return bullets.ToArray();
+    }
+
+    public static void NewShotRing(GameObject bulletPrefab, Vector3 position, Quaternion rotation, int bulletsNumber)
+    {
+        StaticCoroutine.Start(DoShotRing(bulletPrefab, position, rotation, bulletsNumber));
+    }
+
+    public static IEnumerator DoShotRing(GameObject bulletPrefab, Vector3 position, Quaternion rotation, int bulletsNumber)
+    {
+        GameObject effectPrefab = bulletPrefab.GetComponent<SpownEffectContainer>().effectPrefab;
+        float effectTime = effectPrefab.GetComponent<SpownEffectBase>().effectTIme;
+        BarragePool.Get(effectPrefab, position, rotation);
+
+        List<GameObject> bullets = new List<GameObject>();
+        Vector3 eulerAngle = rotation.eulerAngles;
+
+        /*
+         *  每帧一次
+         *  
+         *  每帧确认经过时间
+         *  
+         *  通过经过时间确定需要生成的子弹数量
+         *  
+         *  时间是循环次数的控制之一，子弹必须最终全部生成
+         */
+        float startSpownTime = Time.time;
+        float spownInterval = effectTime / bulletsNumber;
+        for (int i = 0; i < bulletsNumber; i++)
+        {
+            Quaternion currentRotation = new Quaternion();
+            currentRotation.eulerAngles = eulerAngle;
+
+            GameObject bullet = BarragePool.Get(bulletPrefab, position, currentRotation);
+            bullet.SetActive(false);
+            bullets.Add(bullet);
+
+            eulerAngle.z += 360f / bulletsNumber;
+
+            if (i * spownInterval > Time.time - startSpownTime)
+                yield return new WaitForSeconds(i * spownInterval - (Time.time - startSpownTime));
+        }
+
+        foreach (GameObject bullet in bullets)
+            bullet.SetActive(true);
     }
 
     /// <summary>

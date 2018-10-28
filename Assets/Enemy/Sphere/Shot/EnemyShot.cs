@@ -56,7 +56,7 @@ public class EnemyShot : EnemyShotBase
     void DoShot()
     {
         Vector2 shotPoint = new Vector2(Random.Range(-300, 300), Random.Range(0, 500));
-        BarrageLauncher.ShotRing(_bullet, shotPoint, BarrageBase.GetAimRotation(_transform.position, _playerTransform.position), 18);
+        BarrageLauncher.NewShotRing(_bullet, shotPoint, BarrageBase.GetAimRotation(shotPoint, _playerTransform.position), 18);
 
         UpdateNextShot();
     }
