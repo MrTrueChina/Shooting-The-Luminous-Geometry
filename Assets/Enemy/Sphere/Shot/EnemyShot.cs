@@ -57,7 +57,8 @@ public class EnemyShot : EnemyShotBase
     {
         Vector2 shotPoint = new Vector2(Random.Range(-300, 300), Random.Range(0, 500));
         //BarrageLauncher.NewShotRing(_bullet, shotPoint, BarrageBase.GetAimRotation(shotPoint, _playerTransform.position), 18);
-        BarrageLauncher.NewShotABullet(_bullet, shotPoint, BarrageBase.GetAimRotation(shotPoint, _playerTransform.position));
+        //BarrageLauncher.ShotABullet(_bullet, shotPoint, BarrageBase.GetAimRotation(shotPoint, _playerTransform.position));
+        BarrageLauncher.ShotFanShapedBullets(_bullet, shotPoint, BarrageBase.GetAimRotation(shotPoint, _playerTransform.position), 9, 60);
 
         UpdateNextShot();
     }

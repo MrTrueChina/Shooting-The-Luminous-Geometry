@@ -3,7 +3,7 @@ using UnityEngine;
 
 
 /// <summary>
-/// 简易对象池，用来存弹幕
+/// 简易对象池，注意有些物体有专用存入方法
 /// </summary>
 public class Pool : MonoBehaviour
 {

@@ -10,7 +10,7 @@ public class BarrageLauncher : MonoBehaviour
     /// <param name="bullet"></param>
     /// <param name="position"></param>
     /// <param name="rotation"></param>
-    public static void NewShotABullet(GameObject bullet, Vector3 position, Quaternion rotation)
+    public static void ShotABullet(GameObject bullet, Vector3 position, Quaternion rotation)
     {
         StaticCoroutine.Start(DoShotABullet(bullet, position, rotation));
     }
@@ -22,7 +22,7 @@ public class BarrageLauncher : MonoBehaviour
         if (effectPrefab != null)
             yield return StaticCoroutine.Start(ShotABulletWithSpownEffect(bulletPrefab, effectPrefab, position, rotation));
         else
-            yield return ShotABulletWithOutEffect(bulletPrefab, position, rotation);
+            ShotABulletWithOutEffect(bulletPrefab, position, rotation);
     }
 
     static IEnumerator ShotABulletWithSpownEffect(GameObject bulletPrefab, GameObject effectPrefab, Vector3 position, Quaternion rotation)
@@ -50,7 +50,54 @@ public class BarrageLauncher : MonoBehaviour
     /// <param name="rotation"></param>
     /// <param name="bulletsNumber"></param>
     /// <param name="angle"></param>
-    public static GameObject[] ShotFanShapedBullets(GameObject bullet, Vector3 position, Quaternion rotation, int bulletsNumber, float angle)
+    public static void ShotFanShapedBullets(GameObject bullet, Vector3 position, Quaternion rotation, int bulletsNumber, float angle)
+    {
+        StaticCoroutine.Start(DoShotFanShapedBullets(bullet, position, rotation, bulletsNumber, angle));
+    }
+
+    static IEnumerator DoShotFanShapedBullets(GameObject bulletPrefab, Vector3 position, Quaternion rotation, int bulletsNumber, float angle)
+    {
+        GameObject effectPrefab = GetSpownEffectPrefab(bulletPrefab);
+
+        if (effectPrefab != null)
+            yield return StaticCoroutine.Start(ShotFanShapedBulletsWithEffect(bulletPrefab, position, rotation, bulletsNumber, angle));
+        else
+            ShotFanShapedBulletsWithOutEffect(bulletPrefab, position, rotation, bulletsNumber, angle);
+    }
+
+    static IEnumerator ShotFanShapedBulletsWithEffect(GameObject bulletPrefab, Vector3 position, Quaternion rotation, int bulletsNumber, float angle)
+    {
+        GameObject effectPrefab = bulletPrefab.GetComponent<SpownEffectContainer>().effectPrefab;
+        float effectTime = effectPrefab.GetComponent<SpownEffectBase>().effectTIme;
+        Pool.Get(effectPrefab, position, rotation);
+
+        List<GameObject> bullets = new List<GameObject>();
+
+        Vector3 eulerAngle = rotation.eulerAngles;
+        eulerAngle.z -= angle / 2;
+
+        float startSpownTime = Time.time;
+        float spownInterval = effectTime / bulletsNumber;
+        for (int i = 0; i < bulletsNumber; i++)
+        {
+            Quaternion currentRotation = new Quaternion();
+            currentRotation.eulerAngles = eulerAngle;
+
+            GameObject bullet = Pool.Get(bulletPrefab, position, currentRotation);
+            bullet.SetActive(false);
+            bullets.Add(bullet);
+
+            eulerAngle.z += angle / (bulletsNumber - 1);
+
+            if (i * spownInterval > Time.time - startSpownTime)
+                yield return new WaitForSeconds(i * spownInterval - (Time.time - startSpownTime));
+        }
+
+        foreach (GameObject bullet in bullets)
+            bullet.SetActive(true);
+    }
+
+    static GameObject[] ShotFanShapedBulletsWithOutEffect(GameObject bulletPrefab, Vector3 position, Quaternion rotation, int bulletsNumber, float angle)
     {
         List<GameObject> bullets = new List<GameObject>();
 
@@ -62,13 +109,14 @@ public class BarrageLauncher : MonoBehaviour
             Quaternion currentRotation = new Quaternion();
             currentRotation.eulerAngles = eulerAngle;
 
-            bullets.Add(Pool.Get(bullet, position, currentRotation));
+            bullets.Add(Pool.Get(bulletPrefab, position, currentRotation));
 
             eulerAngle.z += angle / (bulletsNumber - 1);
         }
 
         return bullets.ToArray();
     }
+
 
     /// <summary>
     /// 发射环状子弹
