@@ -136,7 +136,7 @@ public class Quadtree<T>
         if (_upperLeftChild._rect.PointToRectDistance(leaf.position) == 0)
             return _upperLeftChild.SetLeaf(leaf);
 
-        Debug.LogError("向位置在" + _rect.position + "宽高是" + _rect.size + "的节点存入叶子时发生错误：叶子不在所有子节点的范围里。");   //Debug.LogError：在Console面板输出Error，就是红色那种消息
+        Debug.LogError("向位置在" + _rect.position + "宽高是" + _rect.size + "的节点存入位置在" + leaf.position + "叶子时发生错误：叶子不在所有子节点的范围里。");   //Debug.LogError：在Console面板输出Error，就是红色那种消息
         return false;
     }
 
@@ -148,7 +148,11 @@ public class Quadtree<T>
     }
     void Split()    //对应叶子位置在子节点精度问题造成的夹缝中的极端情况是否需要增加边缘扩展值
     {
+        //问题在更新！分割之前如果没有及时更新，会导致有的叶子已经离开了树梢的范围但还没有转移到其他树梢上，这时叶子达到数量，进行分割，分割又是向自己的子节点存入叶子，于是就导致这些不在自己范围的叶子存入错误
+
         //Debug.Log("<color=#808000>位置在" + _rect.position + "宽高是" + _rect.size + "的树梢节点达到分割条件，进行分割</color>");
+        Update();   //分割时先更新自身，把已经离开了自己范围的叶子先分出去，防止分割时有叶子离开了自己的范围但还没移走，导致这些叶子也在分割后被直接存入自己的子节点，进而发生存入错误
+
         float childWidth = _rect.width / 2;
         float childHeight = _rect.height / 2;
 

@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class SpownEffectBase : MonoBehaviour
 {
@@ -10,4 +8,12 @@ public class SpownEffectBase : MonoBehaviour
     }
     [SerializeField]
     protected float _effectTime;
+
+
+
+    private void OnValidate()
+    {
+        if (_effectTime < 0)
+            _effectTime = 0;
+    }
 }

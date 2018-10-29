@@ -2,45 +2,36 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//也许可以改成传延迟时间来生成弹幕，毕竟等待的只是特效的时间而不是特效本身
+//之后还可以用传Transform来进行到时间时通过Transform确定位置角度
+//进而分裂控制器也要修改，改成激活时启动传Transform延时发射弹幕的协程，等协程执行完毕就存入池
+
 public class BarrageLauncher : MonoBehaviour
 {
     /// <summary>
     /// 发射单发子弹
     /// </summary>
-    /// <param name="bullet"></param>
+    /// <param name="bulletPrefab"></param>
     /// <param name="position"></param>
     /// <param name="rotation"></param>
-    public static void ShotABullet(GameObject bullet, Vector3 position, Quaternion rotation)
+    public static void ShotABullet(GameObject bulletPrefab, Vector3 position, Quaternion rotation)
     {
-        StaticCoroutine.Start(DoShotABullet(bullet, position, rotation));
+        GameObject effectObject = SpownBulletEffect(bulletPrefab, position, rotation);
+        float effectTime = GetSpownEffectTime(effectObject);
+
+        StaticCoroutine.Start(ShotAndReturnABullet(bulletPrefab, position, rotation, effectTime));
     }
-
-    static IEnumerator DoShotABullet(GameObject bulletPrefab, Vector3 position, Quaternion rotation)
+    static IEnumerator ShotAndReturnABullet(GameObject bulletPrefab, Vector3 position, Quaternion rotation, float spownTime)
     {
-        GameObject effectPrefab = GetSpownEffectPrefab(bulletPrefab);
-        
-        if (effectPrefab != null)
-            yield return StaticCoroutine.Start(ShotABulletWithSpownEffect(bulletPrefab, effectPrefab, position, rotation));
-        else
-            ShotABulletWithOutEffect(bulletPrefab, position, rotation);
-    }
-
-    static IEnumerator ShotABulletWithSpownEffect(GameObject bulletPrefab, GameObject effectPrefab, Vector3 position, Quaternion rotation)
-    {
-        GameObject bullet = ShotABulletWithOutEffect(bulletPrefab, position, rotation);
-        bullet.SetActive(false);
-
-        GameObject effectObject = Pool.Get(effectPrefab, position, rotation);
-        yield return new WaitForSeconds(GetSpownEffectTime(effectObject));
+        GameObject bullet = GetInactiveBullet(bulletPrefab, position, rotation);
+        yield return new WaitForSeconds(spownTime);
 
         bullet.SetActive(true);
+
+        yield return bullet;
     }
 
-    static GameObject ShotABulletWithOutEffect(GameObject bulletPrefab, Vector3 position, Quaternion rotation)
-    {
-        return Pool.Get(bulletPrefab, position, rotation);
-    }
-    
+
 
     /// <summary>
     /// 发射扇形子弹
@@ -60,14 +51,13 @@ public class BarrageLauncher : MonoBehaviour
         GameObject effectPrefab = GetSpownEffectPrefab(bulletPrefab);
 
         if (effectPrefab != null)
-            yield return StaticCoroutine.Start(ShotFanShapedBulletsWithEffect(bulletPrefab, position, rotation, bulletsNumber, angle));
+            yield return StaticCoroutine.Start(ShotFanShapedBulletsWithEffect(bulletPrefab, effectPrefab, position, rotation, bulletsNumber, angle));
         else
             ShotFanShapedBulletsWithOutEffect(bulletPrefab, position, rotation, bulletsNumber, angle);
     }
 
-    static IEnumerator ShotFanShapedBulletsWithEffect(GameObject bulletPrefab, Vector3 position, Quaternion rotation, int bulletsNumber, float angle)
+    static IEnumerator ShotFanShapedBulletsWithEffect(GameObject bulletPrefab, GameObject effectPrefab, Vector3 position, Quaternion rotation, int bulletsNumber, float angle)
     {
-        GameObject effectPrefab = bulletPrefab.GetComponent<SpownEffectContainer>().effectPrefab;
         float effectTime = effectPrefab.GetComponent<SpownEffectBase>().effectTIme;
         Pool.Get(effectPrefab, position, rotation);
 
@@ -115,6 +105,50 @@ public class BarrageLauncher : MonoBehaviour
         }
 
         return bullets.ToArray();
+    }
+
+    public static void NewShotFanShapedBullets(GameObject bulletPrefab, Vector3 position, Quaternion rotation, int bulletsNumber, float angle)
+    {
+        GameObject effectObject = SpownBulletEffect(bulletPrefab, position, rotation);
+        float effectTime = GetSpownEffectTime(effectObject);
+
+        StaticCoroutine.Start(SA(bulletPrefab, position, rotation, bulletsNumber, angle, effectTime));
+    }
+    static IEnumerator SA(GameObject bulletPrefab, Vector3 position, Quaternion rotation, int bulletsNumber, float angle, float effectTime)
+    {
+        ReturnCoroutine<GameObject[]> returnCoroutine = new ReturnCoroutine<GameObject[]>(ShotAndReturnFanShapedBullets(bulletPrefab, position, rotation, bulletsNumber, angle, effectTime));
+        yield return new WaitForSeconds(effectTime);
+
+        foreach (GameObject bullet in returnCoroutine.result)
+            bullet.SetActive(true);
+    }
+    static IEnumerator ShotAndReturnFanShapedBullets(GameObject bulletPrefab, Vector3 position, Quaternion rotation, int bulletsNumber, float angle, float spownTime)
+    {
+        spownTime *= 0.99f; //可能是由于计算速度问题，发生了一次特效时间结束缺没收到返回值的情况，这里预先缩短一下生成时间
+        float startTime = Time.time;
+        List<GameObject> bullets = new List<GameObject>();
+
+        Vector3 eulerAngle = rotation.eulerAngles;
+        eulerAngle.z -= angle / 2;
+
+        for (int i = 0; i < bulletsNumber; i++)
+        {
+            Quaternion currentRotation = new Quaternion();
+            currentRotation.eulerAngles = eulerAngle;
+
+            bullets.Add(GetInactiveBullet(bulletPrefab, position, currentRotation));
+
+            eulerAngle.z += angle / (bulletsNumber - 1);
+
+            float expectedTime = spownTime / bulletsNumber * i;     //生成到当前这一个子弹预期要经过的时间
+            float elapsedTime = Time.time - startTime;              //从生成开始实际经过的时间
+            if (expectedTime > elapsedTime)
+            {
+                yield return new WaitForSeconds(expectedTime - elapsedTime);    //如果预期时间比实际时间多，则说明生成超过计划，等待中间的时间差
+            }
+        }
+
+        yield return bullets.ToArray();
     }
 
 
@@ -188,6 +222,8 @@ public class BarrageLauncher : MonoBehaviour
             bullet.SetActive(true);
     }
 
+
+
     /// <summary>
     /// 发射十字子弹
     /// </summary>
@@ -198,6 +234,8 @@ public class BarrageLauncher : MonoBehaviour
     {
         ShotRing(bullet, position, rotation, 4);
     }
+
+
 
     /// <summary>
     /// 发射横行（háng）子弹
@@ -233,6 +271,8 @@ public class BarrageLauncher : MonoBehaviour
         }
     }
 
+
+
     /// <summary>
     /// 发射方框子弹
     /// </summary>
@@ -265,6 +305,7 @@ public class BarrageLauncher : MonoBehaviour
 
         
     }
+
 
 
     /// <summary>
@@ -328,7 +369,19 @@ public class BarrageLauncher : MonoBehaviour
 
 
 
-
+    /// <summary>
+    /// 获取不活动的子弹
+    /// </summary>
+    /// <param name="bulletPrefab"></param>
+    /// <param name="position"></param>
+    /// <param name="rotation"></param>
+    /// <returns></returns>
+    static GameObject GetInactiveBullet(GameObject bulletPrefab, Vector3 position, Quaternion rotation)
+    {
+        GameObject bullet = Pool.Get(bulletPrefab, position, rotation);
+        bullet.SetActive(false);
+        return bullet;
+    }
 
     /// <summary>
     /// 获取子弹预制的生成特效物体预制
@@ -344,12 +397,34 @@ public class BarrageLauncher : MonoBehaviour
     }
 
     /// <summary>
-    /// 获取特效物体的特效执行时间
+    /// 获取特效物体的特效执行时间，如果找不到则返回0
     /// </summary>
     /// <param name="effectObject"></param>
     /// <returns></returns>
     static float GetSpownEffectTime(GameObject effectObject)
     {
-        return effectObject.GetComponent<SpownEffectBase>().effectTIme;
+        if (effectObject != null)
+        {
+            SpownEffectBase effectBase = effectObject.GetComponent<SpownEffectBase>();
+            if (effectBase != null)
+                return effectBase.effectTIme;
+        }
+        return 0;
+    }
+
+    /// <summary>
+    /// 生成子弹储存的特效并返回特效物体，没有储存特效则返回null
+    /// </summary>
+    /// <param name="bulletPrefab"></param>
+    /// <param name="position"></param>
+    /// <param name="rotation"></param>
+    /// <returns></returns>
+    static GameObject SpownBulletEffect(GameObject bulletPrefab, Vector3 position, Quaternion rotation)
+    {
+        SpownEffectContainer container = bulletPrefab.GetComponent<SpownEffectContainer>();
+        if (container != null && container.effectPrefab != null)
+            return Pool.Get(container.effectPrefab, position, rotation);
+
+        return null;
     }
 }
