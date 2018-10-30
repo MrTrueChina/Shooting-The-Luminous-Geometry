@@ -52,7 +52,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea500a761d355814cb3d7e9276f9933f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _effectTime: 5
+  _effectTime: 2
   _renderer: {fileID: 212542227554704620}
   _effectStartDiameter: 300
   _effectEndDiameter: 60

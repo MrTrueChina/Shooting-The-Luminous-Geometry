@@ -18,8 +18,8 @@ public class BarrageLauncher : MonoBehaviour
     /// <param name="rotation"></param>
     public static void ShotABullet(GameObject bulletPrefab, Vector3 position, Quaternion rotation)
     {
-        GameObject effectObject = SpownBulletEffect(bulletPrefab, position, rotation);
-        float effectTime = GetSpownEffectTime(effectObject);
+        GameObject effectObject = CreatSpownEffect(bulletPrefab, position, rotation);
+        float effectTime = GetEffectTime(effectObject);
 
         StaticCoroutine.Start(ShotAndReturnABullet(bulletPrefab, position, rotation, effectTime));
     }
@@ -43,14 +43,14 @@ public class BarrageLauncher : MonoBehaviour
     /// <param name="rotation"></param>
     /// <param name="bulletsNumber"></param>
     /// <param name="angle"></param>
-    public static void ShotFanShapedBullets(GameObject bulletPrefab, Vector3 position, Quaternion rotation, int bulletsNumber, float angle)
+    public static void ShotFanShaped(GameObject bulletPrefab, Vector3 position, Quaternion rotation, int bulletsNumber, float angle)
     {
-        GameObject effectObject = SpownBulletEffect(bulletPrefab, position, rotation);
-        float effectTime = GetSpownEffectTime(effectObject);
+        GameObject effectObject = CreatSpownEffect(bulletPrefab, position, rotation);
+        float effectTime = GetEffectTime(effectObject);
 
-        StaticCoroutine.Start(StartShotFanShapedBullets(bulletPrefab, position, rotation, bulletsNumber, angle, effectTime));
+        StaticCoroutine.Start(StartShotFanShaped(bulletPrefab, position, rotation, bulletsNumber, angle, effectTime));
     }
-    static IEnumerator StartShotFanShapedBullets(GameObject bulletPrefab, Vector3 position, Quaternion rotation, int bulletsNumber, float angle, float effectTime)
+    static IEnumerator StartShotFanShaped(GameObject bulletPrefab, Vector3 position, Quaternion rotation, int bulletsNumber, float angle, float effectTime)
     {
         ReturnCoroutine<GameObject[]> returnCoroutine = new ReturnCoroutine<GameObject[]>(ShotAndReturnFanShapedBullets(bulletPrefab, position, rotation, bulletsNumber, angle, effectTime));
         yield return new WaitForSeconds(effectTime);
@@ -67,15 +67,14 @@ public class BarrageLauncher : MonoBehaviour
         float ballisticAngle = angle / (bulletsNumber - 1);
 
         float startTime = Time.time;
-        float expectedTime, elapsedTime;            //expectedTime：预期时间     elapsedTime：实际经过时间
         for (int i = 0; i < bulletsNumber; i++)
         {
             Quaternion currentRotation = Quaternion.Euler(originEulerAngle.x, originEulerAngle.y, startEulerZ + i * ballisticAngle);
 
             bullets.Add(GetInactiveBullet(bulletPrefab, position, currentRotation));
 
-            expectedTime = spownTime / bulletsNumber * i;     //生成到当前这一个子弹预期要经过的时间
-            elapsedTime = Time.time - startTime;              //从生成开始实际经过的时间
+            float expectedTime = spownTime / bulletsNumber * i;     //生成到当前这一个子弹预期要经过的时间
+            float elapsedTime = Time.time - startTime;              //从生成开始实际经过的时间
             if (expectedTime > elapsedTime)
                 yield return new WaitForSeconds(expectedTime - elapsedTime);    //如果预期时间比实际时间多，则说明生成超过计划，等待中间的时间差
         }
@@ -91,7 +90,7 @@ public class BarrageLauncher : MonoBehaviour
     /// <param name="position"></param>
     /// <param name="rotation"></param>
     /// <param name="bulletNumber"></param>
-    public static GameObject[] ShotRing(GameObject bullet, Vector3 position, Quaternion rotation, int bulletsNumber)
+    public static GameObject[] OldShotRing(GameObject bullet, Vector3 position, Quaternion rotation, int bulletsNumber)
     {
         List<GameObject> bullets = new List<GameObject>();
 
@@ -110,48 +109,42 @@ public class BarrageLauncher : MonoBehaviour
         return bullets.ToArray();
     }
 
-    public static void NewShotRing(GameObject bulletPrefab, Vector3 position, Quaternion rotation, int bulletsNumber)
+    public static void ShotRing(GameObject bulletPrefab, Vector3 position, Quaternion rotation, int bulletsNumber)
     {
-        StaticCoroutine.Start(DoShotRing(bulletPrefab, position, rotation, bulletsNumber));
+        GameObject effectObject = CreatSpownEffect(bulletPrefab, position, rotation);
+        float effectTime = GetEffectTime(effectObject);
+
+        StaticCoroutine.Start(StartShotRing(bulletPrefab, position, rotation, bulletsNumber, effectTime));
     }
-
-    public static IEnumerator DoShotRing(GameObject bulletPrefab, Vector3 position, Quaternion rotation, int bulletsNumber)
+    static IEnumerator StartShotRing(GameObject bulletPrefab, Vector3 position, Quaternion rotation, int bulletsNumber, float effectTime)
     {
-        GameObject effectPrefab = bulletPrefab.GetComponent<SpownEffectContainer>().effectPrefab;
-        float effectTime = effectPrefab.GetComponent<SpownEffectBase>().effectTIme;
-        Pool.Get(effectPrefab, position, rotation);
+        ReturnCoroutine<GameObject[]> returnCoroutine = new ReturnCoroutine<GameObject[]>(ShotAndReturnRingBullet(bulletPrefab, position, rotation, bulletsNumber, effectTime));
+        yield return new WaitForSeconds(effectTime);
 
+        foreach (GameObject bullet in returnCoroutine.result)
+            bullet.SetActive(true);
+    }
+    static IEnumerator ShotAndReturnRingBullet(GameObject bulletPrefab, Vector3 position, Quaternion rotation, int bulletsNumber, float spownTime)
+    {
         List<GameObject> bullets = new List<GameObject>();
-        Vector3 eulerAngle = rotation.eulerAngles;
 
-        /*
-         *  每帧一次
-         *  
-         *  每帧确认经过时间
-         *  
-         *  通过经过时间确定需要生成的子弹数量
-         *  
-         *  时间是循环次数的控制之一，子弹必须最终全部生成
-         */
-        float startSpownTime = Time.time;
-        float spownInterval = effectTime / bulletsNumber;
+        Vector3 originEuler = rotation.eulerAngles;
+        float ballisticAngle = 360f / bulletsNumber;
+
+        float startTime = Time.time;
         for (int i = 0; i < bulletsNumber; i++)
         {
-            Quaternion currentRotation = new Quaternion();
-            currentRotation.eulerAngles = eulerAngle;
+            Quaternion currentRotation = Quaternion.Euler(originEuler.x, originEuler.y, originEuler.z + ballisticAngle * i);
 
-            GameObject bullet = Pool.Get(bulletPrefab, position, currentRotation);
-            bullet.SetActive(false);
-            bullets.Add(bullet);
+            bullets.Add(GetInactiveBullet(bulletPrefab, position, currentRotation));
 
-            eulerAngle.z += 360f / bulletsNumber;
-
-            if (i * spownInterval > Time.time - startSpownTime)
-                yield return new WaitForSeconds(i * spownInterval - (Time.time - startSpownTime));
+            float expectedTime = spownTime / bulletsNumber * i;
+            float elapsedTime = Time.time - startTime;
+            if (expectedTime > elapsedTime)
+                yield return new WaitForSeconds(expectedTime - elapsedTime);
         }
 
-        foreach (GameObject bullet in bullets)
-            bullet.SetActive(true);
+        yield return bullets.ToArray();
     }
 
 
@@ -333,7 +326,7 @@ public class BarrageLauncher : MonoBehaviour
     /// </summary>
     /// <param name="effectObject"></param>
     /// <returns></returns>
-    static float GetSpownEffectTime(GameObject effectObject)
+    static float GetEffectTime(GameObject effectObject)
     {
         if (effectObject != null)
         {
@@ -351,7 +344,7 @@ public class BarrageLauncher : MonoBehaviour
     /// <param name="position"></param>
     /// <param name="rotation"></param>
     /// <returns></returns>
-    static GameObject SpownBulletEffect(GameObject bulletPrefab, Vector3 position, Quaternion rotation)
+    static GameObject CreatSpownEffect(GameObject bulletPrefab, Vector3 position, Quaternion rotation)
     {
         SpownEffectContainer container = bulletPrefab.GetComponent<SpownEffectContainer>();
         if (container != null && container.effectPrefab != null)
