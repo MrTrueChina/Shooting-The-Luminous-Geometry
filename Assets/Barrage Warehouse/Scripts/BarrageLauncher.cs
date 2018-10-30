@@ -5,6 +5,8 @@ using UnityEngine;
 //也许可以改成传延迟时间来生成弹幕，毕竟等待的只是特效的时间而不是特效本身
 //之后还可以用传Transform来进行到时间时通过Transform确定位置角度
 //进而分裂控制器也要修改，改成激活时启动传Transform延时发射弹幕的协程，等协程执行完毕就存入池
+//还有问题，如果生成过程中子弹被消弹了或越界了怎么处理
+//以及如果越界了或消弹了之后又被取出来激活了怎么办，这种时候通过激活状态来做判断很明显不行
 
 public class BarrageLauncher : MonoBehaviour
 {
@@ -36,85 +38,19 @@ public class BarrageLauncher : MonoBehaviour
     /// <summary>
     /// 发射扇形子弹
     /// </summary>
-    /// <param name="bullet"></param>
+    /// <param name="bulletPrefab"></param>
     /// <param name="position"></param>
     /// <param name="rotation"></param>
     /// <param name="bulletsNumber"></param>
     /// <param name="angle"></param>
-    public static void ShotFanShapedBullets(GameObject bullet, Vector3 position, Quaternion rotation, int bulletsNumber, float angle)
-    {
-        StaticCoroutine.Start(DoShotFanShapedBullets(bullet, position, rotation, bulletsNumber, angle));
-    }
-
-    static IEnumerator DoShotFanShapedBullets(GameObject bulletPrefab, Vector3 position, Quaternion rotation, int bulletsNumber, float angle)
-    {
-        GameObject effectPrefab = GetSpownEffectPrefab(bulletPrefab);
-
-        if (effectPrefab != null)
-            yield return StaticCoroutine.Start(ShotFanShapedBulletsWithEffect(bulletPrefab, effectPrefab, position, rotation, bulletsNumber, angle));
-        else
-            ShotFanShapedBulletsWithOutEffect(bulletPrefab, position, rotation, bulletsNumber, angle);
-    }
-
-    static IEnumerator ShotFanShapedBulletsWithEffect(GameObject bulletPrefab, GameObject effectPrefab, Vector3 position, Quaternion rotation, int bulletsNumber, float angle)
-    {
-        float effectTime = effectPrefab.GetComponent<SpownEffectBase>().effectTIme;
-        Pool.Get(effectPrefab, position, rotation);
-
-        List<GameObject> bullets = new List<GameObject>();
-
-        Vector3 eulerAngle = rotation.eulerAngles;
-        eulerAngle.z -= angle / 2;
-
-        float startSpownTime = Time.time;
-        float spownInterval = effectTime / bulletsNumber;
-        for (int i = 0; i < bulletsNumber; i++)
-        {
-            Quaternion currentRotation = new Quaternion();
-            currentRotation.eulerAngles = eulerAngle;
-
-            GameObject bullet = Pool.Get(bulletPrefab, position, currentRotation);
-            bullet.SetActive(false);
-            bullets.Add(bullet);
-
-            eulerAngle.z += angle / (bulletsNumber - 1);
-
-            if (i * spownInterval > Time.time - startSpownTime)
-                yield return new WaitForSeconds(i * spownInterval - (Time.time - startSpownTime));
-        }
-
-        foreach (GameObject bullet in bullets)
-            bullet.SetActive(true);
-    }
-
-    static GameObject[] ShotFanShapedBulletsWithOutEffect(GameObject bulletPrefab, Vector3 position, Quaternion rotation, int bulletsNumber, float angle)
-    {
-        List<GameObject> bullets = new List<GameObject>();
-
-        Vector3 eulerAngle = rotation.eulerAngles;
-        eulerAngle.z -= angle / 2;
-
-        for (int i = 0; i < bulletsNumber; i++)
-        {
-            Quaternion currentRotation = new Quaternion();
-            currentRotation.eulerAngles = eulerAngle;
-
-            bullets.Add(Pool.Get(bulletPrefab, position, currentRotation));
-
-            eulerAngle.z += angle / (bulletsNumber - 1);
-        }
-
-        return bullets.ToArray();
-    }
-
-    public static void NewShotFanShapedBullets(GameObject bulletPrefab, Vector3 position, Quaternion rotation, int bulletsNumber, float angle)
+    public static void ShotFanShapedBullets(GameObject bulletPrefab, Vector3 position, Quaternion rotation, int bulletsNumber, float angle)
     {
         GameObject effectObject = SpownBulletEffect(bulletPrefab, position, rotation);
         float effectTime = GetSpownEffectTime(effectObject);
 
-        StaticCoroutine.Start(SA(bulletPrefab, position, rotation, bulletsNumber, angle, effectTime));
+        StaticCoroutine.Start(StartShotFanShapedBullets(bulletPrefab, position, rotation, bulletsNumber, angle, effectTime));
     }
-    static IEnumerator SA(GameObject bulletPrefab, Vector3 position, Quaternion rotation, int bulletsNumber, float angle, float effectTime)
+    static IEnumerator StartShotFanShapedBullets(GameObject bulletPrefab, Vector3 position, Quaternion rotation, int bulletsNumber, float angle, float effectTime)
     {
         ReturnCoroutine<GameObject[]> returnCoroutine = new ReturnCoroutine<GameObject[]>(ShotAndReturnFanShapedBullets(bulletPrefab, position, rotation, bulletsNumber, angle, effectTime));
         yield return new WaitForSeconds(effectTime);
@@ -124,28 +60,24 @@ public class BarrageLauncher : MonoBehaviour
     }
     static IEnumerator ShotAndReturnFanShapedBullets(GameObject bulletPrefab, Vector3 position, Quaternion rotation, int bulletsNumber, float angle, float spownTime)
     {
-        spownTime *= 0.99f; //可能是由于计算速度问题，发生了一次特效时间结束缺没收到返回值的情况，这里预先缩短一下生成时间
-        float startTime = Time.time;
         List<GameObject> bullets = new List<GameObject>();
 
-        Vector3 eulerAngle = rotation.eulerAngles;
-        eulerAngle.z -= angle / 2;
+        Vector3 originEulerAngle = rotation.eulerAngles;
+        float startEulerZ = originEulerAngle.z - angle / 2;
+        float ballisticAngle = angle / (bulletsNumber - 1);
 
+        float startTime = Time.time;
+        float expectedTime, elapsedTime;            //expectedTime：预期时间     elapsedTime：实际经过时间
         for (int i = 0; i < bulletsNumber; i++)
         {
-            Quaternion currentRotation = new Quaternion();
-            currentRotation.eulerAngles = eulerAngle;
+            Quaternion currentRotation = Quaternion.Euler(originEulerAngle.x, originEulerAngle.y, startEulerZ + i * ballisticAngle);
 
             bullets.Add(GetInactiveBullet(bulletPrefab, position, currentRotation));
 
-            eulerAngle.z += angle / (bulletsNumber - 1);
-
-            float expectedTime = spownTime / bulletsNumber * i;     //生成到当前这一个子弹预期要经过的时间
-            float elapsedTime = Time.time - startTime;              //从生成开始实际经过的时间
+            expectedTime = spownTime / bulletsNumber * i;     //生成到当前这一个子弹预期要经过的时间
+            elapsedTime = Time.time - startTime;              //从生成开始实际经过的时间
             if (expectedTime > elapsedTime)
-            {
                 yield return new WaitForSeconds(expectedTime - elapsedTime);    //如果预期时间比实际时间多，则说明生成超过计划，等待中间的时间差
-            }
         }
 
         yield return bullets.ToArray();

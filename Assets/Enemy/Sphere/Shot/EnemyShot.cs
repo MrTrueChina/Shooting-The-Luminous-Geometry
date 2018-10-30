@@ -61,7 +61,7 @@ public class EnemyShot : EnemyShotBase
         //BarrageLauncher.ShotABullet(_bullet, shotPoint, rotateToPlayer);
         //BarrageLauncher.ShotFanShapedBullets(_bullet, shotPoint, rotateToPlayer, 9, 60);
         //BarrageLauncher.ShotABullet(_bullet, shotPoint, rotateToPlayer);
-        BarrageLauncher.NewShotFanShapedBullets(_bullet, shotPoint, rotateToPlayer, 30, 30);
+        BarrageLauncher.ShotFanShapedBullets(_bullet, shotPoint, rotateToPlayer, 5, 30);
 
         UpdateNextShot();
     }
