@@ -163,21 +163,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b49307bb59ea4840aa6de3011076b56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _moveBorder:
-    top: 550
-    right: 300
-    bottom: 200
-    left: -300
-  _adjustmentBorder:
-    top: 500
-    right: 250
-    bottom: 250
-    left: -250
-  _targetBorder:
-    top: 450
-    right: 200
-    bottom: 300
-    left: -200
   _maxAcceleration: 50
   _maxSpeed: 100
   _nextTargetDistance: 100
@@ -192,5 +177,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2530f10d2b9dc434fa4f5b525511a435, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _bullet: {fileID: 1829913912689852, guid: 49fd23e09c058084bbd49a8467e02ca9, type: 2}
-  _shotInterval: 1
+  _bullet: {fileID: 1829913912689852, guid: 1ea380e42401c8841a261cd656151ec2, type: 2}
+  _shotInterval: 5

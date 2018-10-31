@@ -86,6 +86,7 @@ public class BarrageLauncher : MonoBehaviour
     }
 
 
+
     /// <summary>
     /// 发射环状子弹
     /// </summary>
@@ -268,8 +269,15 @@ public class BarrageLauncher : MonoBehaviour
     }
 
 
-
-    //发射向中央瞄准的环装子弹
+    
+    /// <summary>
+    /// 发射向中央聚集的环状子弹
+    /// </summary>
+    /// <param name="bulletPrefab"></param>
+    /// <param name="position"></param>
+    /// <param name="rotation"></param>
+    /// <param name="bulletsNumber"></param>
+    /// <param name="radius"></param>
     public static void ShotRingToCenter(GameObject bulletPrefab, Vector3 position, Quaternion rotation, int bulletsNumber, float radius)
     {
         GameObject effectPrefab = GetEffectPrefab(bulletPrefab);
@@ -292,7 +300,7 @@ public class BarrageLauncher : MonoBehaviour
 
             Vector3 currentPosition = position + new Vector3(Mathf.Cos(currentEulerZ * Mathf.Deg2Rad) * radius, Mathf.Sin(currentEulerZ * Mathf.Deg2Rad) * radius, 0);
 
-            if (StandardValue.viewBorder.PointToRectDistance(currentPosition) > 0)
+            if (!StandardValue.viewBorder.Inside(currentPosition))
                 continue;
 
             Pool.Get(effectPrefab, currentPosition, currentRotation);
@@ -324,7 +332,7 @@ public class BarrageLauncher : MonoBehaviour
 
             Quaternion currentRotation = Quaternion.Euler(originEuler.x, originEuler.y, currentEulerZ + 90);    //+90°的原因很明显是因为角度的起始点不一致，但有些说不清，去掉90再看效果就知道了
 
-            if (StandardValue.viewBorder.PointToRectDistance(currentPosition) > 0)
+            if (!StandardValue.viewBorder.Inside(currentPosition))
                 continue;
 
             bullets.Add(GetInactiveBullet(bulletPrefab, currentPosition, currentRotation));
@@ -387,6 +395,11 @@ public class BarrageLauncher : MonoBehaviour
         return bullet;
     }
 
+    /// <summary>
+    /// 获取特效预制
+    /// </summary>
+    /// <param name="bulletPrefab"></param>
+    /// <returns></returns>
     static GameObject GetEffectPrefab(GameObject bulletPrefab)
     {
         SpownEffectContainer container = bulletPrefab.GetComponent<SpownEffectContainer>();

@@ -57,12 +57,12 @@ public class EnemyShot : EnemyShotBase
     {
         Vector2 shotPoint = new Vector2(Random.Range(-300, 300), Random.Range(0, 500));
         Quaternion rotateToPlayer = BarrageBase.GetAimRotation(shotPoint, _playerTransform.position);
-        //BarrageLauncher.ShotRing(_bullet, shotPoint, rotateToPlayer, 18);
+        BarrageLauncher.ShotRing(_bullet, shotPoint, rotateToPlayer, 18);
         //BarrageLauncher.ShotABullet(_bullet, shotPoint, rotateToPlayer);
         //BarrageLauncher.ShotFanShaped(_bullet, shotPoint, rotateToPlayer, 9, 60);
         //BarrageLauncher.ShotTransverselyLine(_bullet, shotPoint, rotateToPlayer, 17, 60);
         //BarrageLauncher.ShotPane(_bullet, shotPoint, rotateToPlayer, 7);
-        BarrageLauncher.ShotRingToCenter(_bullet, _playerTransform.position, Quaternion.identity, 8, 400);
+        //BarrageLauncher.ShotRingToCenter(_bullet, _playerTransform.position, Quaternion.identity, 8, 400);
 
         UpdateNextShot();
     }

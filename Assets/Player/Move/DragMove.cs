@@ -2,9 +2,6 @@
 
 public class DragMove : MonoBehaviour
 {
-    [SerializeField]
-    Border _border;
-
     Transform _transform;
     
     bool _moving = false;
@@ -76,8 +73,8 @@ public class DragMove : MonoBehaviour
     }
     Vector3 GetClampedPosition(Vector3 position)
     {
-        float clampedX = Mathf.Clamp(position.x, _border.left, _border.right);
-        float clampedY = Mathf.Clamp(position.y, _border.bottom, _border.top);
+        float clampedX = Mathf.Clamp(position.x, StandardValue.viewBorder.left, StandardValue.viewBorder.right);
+        float clampedY = Mathf.Clamp(position.y, StandardValue.viewBorder.bottom, StandardValue.viewBorder.top);
         Vector3 clampedPosition = new Vector3(clampedX, clampedY, position.z);
 
         return clampedPosition;
@@ -102,10 +99,10 @@ public class DragMove : MonoBehaviour
     {
         Gizmos.color = Color.yellow;
 
-        Vector3 upperRight = new Vector3(_border.right, _border.top, 0);
-        Vector3 lowerRight = new Vector3(_border.right, _border.bottom, 0);
-        Vector3 lowerLeft = new Vector3(_border.left, _border.bottom, 0);
-        Vector3 upperLeft = new Vector3(_border.left, _border.top, 0);
+        Vector3 upperRight = new Vector3(StandardValue.viewBorder.right, StandardValue.viewBorder.top, 0);
+        Vector3 lowerRight = new Vector3(StandardValue.viewBorder.right, StandardValue.viewBorder.bottom, 0);
+        Vector3 lowerLeft = new Vector3(StandardValue.viewBorder.left, StandardValue.viewBorder.bottom, 0);
+        Vector3 upperLeft = new Vector3(StandardValue.viewBorder.left, StandardValue.viewBorder.top, 0);
 
         MyGizmos.DrawRectangle(upperRight, lowerRight, lowerLeft, upperLeft);
     }

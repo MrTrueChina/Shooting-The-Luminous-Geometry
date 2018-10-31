@@ -40,7 +40,7 @@ GameObject:
   - component: {fileID: 114102915370473832}
   - component: {fileID: 114207321102398272}
   m_Layer: 0
-  m_Name: Straight
+  m_Name: Straight_Ring
   m_TagString: Enemy Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -84,11 +84,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b822e16715b4604d98137e4809af15e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _destroyBorder:
-    top: 650
-    right: 425
-    bottom: -650
-    left: -425
   _speed: 250
 --- !u!114 &114102915370473832
 MonoBehaviour:
@@ -162,7 +157,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 52c95a0163a7ac14f8f4ea13b673edfd, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f3d340a15caad8149a18f6cb999343a3, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

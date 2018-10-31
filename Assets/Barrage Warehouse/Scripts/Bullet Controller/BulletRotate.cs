@@ -59,10 +59,8 @@ public class BulletRotate : BulletContorllerBase
         if (Time.time < _startRotateTime) return;
 
         float currentEularZ = Mathf.Lerp(_originEulerZ, _targetEulerZ, Mathf.Min(1, Mathf.InverseLerp(_startRotateTime, _endRotateTime, Time.time)));
-
-        Quaternion rotation = new Quaternion();
-        rotation.eulerAngles = new Vector3(0, 0, currentEularZ);
-        _bulletMove.rotation = rotation;
+        
+        _bulletMove.rotation = Quaternion.Euler(new Vector3(0, 0, currentEularZ));
 
         if (Time.time > _endRotateTime)
             enabled = false;

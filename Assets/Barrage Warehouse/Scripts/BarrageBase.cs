@@ -28,4 +28,16 @@ public static class BarrageBase
 
         return angle;
     }
+
+    /// <summary>
+    /// 获取玩家Transform组件
+    /// </summary>
+    /// <returns></returns>
+    public static Transform GetPlayerTransform()
+    {
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
+            return player.transform;
+        return null;
+    }
 }

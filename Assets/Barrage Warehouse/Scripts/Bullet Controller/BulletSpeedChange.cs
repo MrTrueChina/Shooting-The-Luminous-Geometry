@@ -48,7 +48,7 @@ public class BulletSpeedChange : BulletContorllerBase
     private void OnEnable()
     {
         _startChangeTime = Time.time + _startTime;
-        _endChangeTime = _startTime + _changeTime;
+        _endChangeTime = _startChangeTime + _changeTime;
         _originSpeed = _bulletMove.speed;
     }
 
@@ -59,7 +59,7 @@ public class BulletSpeedChange : BulletContorllerBase
         if (Time.time < _startChangeTime) return;
 
         _bulletMove.speed = Mathf.Lerp(_originSpeed, _targetSpeed, Mathf.Min(1, Mathf.InverseLerp(_startChangeTime, _endChangeTime, Time.time)));
-
+        
         if (Time.time > _endChangeTime)
             enabled = false;
     }
@@ -69,5 +69,14 @@ public class BulletSpeedChange : BulletContorllerBase
     public override void Restore()
     {
         enabled = true;
+    }
+
+
+
+
+    private void OnValidate()
+    {
+        if (_changeTime < 0.001f)
+            _changeTime = 0.001f;
     }
 }

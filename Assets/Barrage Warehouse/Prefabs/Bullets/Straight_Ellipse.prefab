@@ -38,8 +38,9 @@ GameObject:
   - component: {fileID: 114026269334970372}
   - component: {fileID: 114414317877080682}
   - component: {fileID: 114102915370473832}
+  - component: {fileID: 114207321102398272}
   m_Layer: 0
-  m_Name: Straight With Out Effect
+  m_Name: Straight_Ellipse
   m_TagString: Enemy Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -67,7 +68,7 @@ Transform:
   m_GameObject: {fileID: 1748332208432688}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 60, y: 60, z: 1}
+  m_LocalScale: {x: 45, y: 45, z: 1}
   m_Children: []
   m_Father: {fileID: 4406689593316606}
   m_RootOrder: 0
@@ -83,11 +84,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b822e16715b4604d98137e4809af15e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _destroyBorder:
-    top: 650
-    right: 425
-    bottom: -650
-    left: -425
   _speed: 250
 --- !u!114 &114102915370473832
 MonoBehaviour:
@@ -102,6 +98,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _radius: 7.5
   _checkCollision: 0
+--- !u!114 &114207321102398272
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1829913912689852}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0242de55e1be29b4f838275dfff1d715, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _effectPrefab: {fileID: 1859996535275656, guid: c86ad1d3c7cd85246a8c5e07c8ba3a0d,
+    type: 2}
 --- !u!114 &114414317877080682
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -148,7 +157,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 52c95a0163a7ac14f8f4ea13b673edfd, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a9e27ff46e6150342b7484d6d2a32b6d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

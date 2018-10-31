@@ -5,8 +5,6 @@
 /// </summary>
 public class BulletMoveUp : BulletContorllerBase
 {
-    [SerializeField]
-    Border _destroyBorder;
     public float speed
     {
         get { return _speed; }
@@ -50,12 +48,8 @@ public class BulletMoveUp : BulletContorllerBase
     
     void CheckAndSetToPool()
     {
-        if (OutOfBorder())
+        if (!StandardValue.bulletMoveBorder.Inside(transform.position))
             Pool.SetBullet(gameObject);
-    }
-    bool OutOfBorder()
-    {
-        return _transform.position.x > _destroyBorder.right || _transform.position.x < _destroyBorder.left || _transform.position.y > _destroyBorder.top || _transform.position.y < _destroyBorder.bottom;
     }
 
 
@@ -87,10 +81,10 @@ public class BulletMoveUp : BulletContorllerBase
     {
         Gizmos.color = Color.yellow;
 
-        Vector3 upperRight = new Vector3(_destroyBorder.right, _destroyBorder.top, 0);
-        Vector3 lowerRight = new Vector3(_destroyBorder.right, _destroyBorder.bottom, 0);
-        Vector3 lowerLeft = new Vector3(_destroyBorder.left, _destroyBorder.bottom, 0);
-        Vector3 upperLeft = new Vector3(_destroyBorder.left, _destroyBorder.top, 0);
+        Vector3 upperRight = new Vector3(StandardValue.bulletMoveBorder.right, StandardValue.bulletMoveBorder.top, 0);
+        Vector3 lowerRight = new Vector3(StandardValue.bulletMoveBorder.right, StandardValue.bulletMoveBorder.bottom, 0);
+        Vector3 lowerLeft = new Vector3(StandardValue.bulletMoveBorder.left, StandardValue.bulletMoveBorder.bottom, 0);
+        Vector3 upperLeft = new Vector3(StandardValue.bulletMoveBorder.left, StandardValue.bulletMoveBorder.top, 0);
 
         MyGizmos.DrawRectangle(upperRight, lowerRight, lowerLeft, upperLeft);
     }

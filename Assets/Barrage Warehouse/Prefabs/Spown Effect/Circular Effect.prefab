@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 212542227554704620}
   - component: {fileID: 114551066771446690}
   m_Layer: 0
-  m_Name: Ring Effect
+  m_Name: Circular Effect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -57,7 +57,7 @@ MonoBehaviour:
   _effectStartDiameter: 300
   _effectEndDiameter: 60
   _effectStartTransparency: 0
-  _effectEndTransparency: 2
+  _effectEndTransparency: 1
 --- !u!212 &212542227554704620
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -92,7 +92,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 52c95a0163a7ac14f8f4ea13b673edfd, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 14709435786236347b2059daf1db470c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
